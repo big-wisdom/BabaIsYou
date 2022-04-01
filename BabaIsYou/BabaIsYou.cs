@@ -69,7 +69,11 @@ namespace CS5410
 
             m_currentState.render(gameTime);
 
-            m_currentState = m_states[m_nextStateEnum];
+            if (m_currentState != m_states[m_nextStateEnum])
+            {
+                m_currentState = m_states[m_nextStateEnum];
+                m_currentState.initializeSession();
+            }
 
             base.Draw(gameTime);
         }

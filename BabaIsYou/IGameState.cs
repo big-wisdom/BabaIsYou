@@ -6,6 +6,7 @@ namespace CS5410
 {
     public interface IGameState
     {
+        void initializeSession();
         void initialize(GraphicsDevice graphicsDevice, GraphicsDeviceManager graphics);
         void loadContent(ContentManager contentManager);
         GameStateEnum processInput(GameTime gameTime);
