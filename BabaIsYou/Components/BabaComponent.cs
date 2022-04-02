@@ -9,8 +9,10 @@ namespace Components
         public Direction direction {
             set
             {
-                if (value == previousDirection)
+                if (value == previousDirection) { 
                     directionInARow++;
+                    if (directionInARow == 15) directionInARow = 0;
+                }
                 else
                 {
                     previousDirection = value;
