@@ -1,5 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BabaIsYou;
+using Components;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
 namespace CS5410
@@ -10,6 +13,15 @@ namespace CS5410
         private IGameState m_currentState;
         private GameStateEnum m_nextStateEnum = GameStateEnum.MainMenu;
         private Dictionary<GameStateEnum, IGameState> m_states;
+        public KeyboardModel keyboard = new KeyboardModel();
+
+        public Dictionary<Keys, Components.Direction> controls = new Dictionary<Keys, Components.Direction>()
+        {
+            { Keys.Up, Direction.Up },
+            { Keys.Right, Direction.Right },
+            { Keys.Down, Direction.Down },
+            { Keys.Left, Direction.Left },
+        };
 
         public BabaIsYou()
         {
@@ -28,7 +40,7 @@ namespace CS5410
             // Create all the game states here
             m_states = new Dictionary<GameStateEnum, IGameState>();
             m_states.Add(GameStateEnum.MainMenu, new MainMenuView());
-            m_states.Add(GameStateEnum.GamePlay, new GamePlayView());
+            m_states.Add(GameStateEnum.GamePlay, new GamePlayView(controls, keyboard));
             m_states.Add(GameStateEnum.HighScores, new HighScoresView());
             m_states.Add(GameStateEnum.Help, new HelpView());
             m_states.Add(GameStateEnum.About, new AboutView());

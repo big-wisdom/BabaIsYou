@@ -130,8 +130,10 @@ namespace Entities
         public TComponent GetComponent<TComponent>()
             where TComponent : Component
         {
-            Debug.Assert(components.ContainsKey(typeof(TComponent)), string.Format("component of type {0} is not a part of this entity", typeof(TComponent)));
-            return (TComponent)this.components[typeof(TComponent)];
+            if (components.ContainsKey(typeof(TComponent)))
+                return (TComponent)this.components[typeof(TComponent)];
+            else
+                return null;
         }
 
         /// <summary>

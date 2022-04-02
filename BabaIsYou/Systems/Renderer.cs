@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -8,32 +9,20 @@ namespace Systems
 
     class Renderer : System
     {
-        private readonly int GRID_SIZE;
+        private readonly List<List<Entities.Entity>> gameBoard;
         private readonly int CELL_SIZE;
-        private readonly int OFFSET_X;
-        private readonly int OFFSET_Y;
         private readonly SpriteBatch m_spriteBatch;
-        //private readonly Texture2D m_texBackground;
 
-        public Renderer(SpriteBatch spriteBatch, int width, int height, int gridSize) :
+        public Renderer(SpriteBatch spriteBatch, int width, int height, List<List<Entities.Entity>> gameBoard) :
             base(typeof(Components.Appearance), typeof(Components.Position))
         {
-            GRID_SIZE = gridSize;
-            CELL_SIZE = height / gridSize;
-            OFFSET_X = (width - gridSize * CELL_SIZE) / 2;
-            OFFSET_Y = (height - gridSize * CELL_SIZE) / 2;
+            CELL_SIZE = height / gameBoard.Count;
             m_spriteBatch = spriteBatch;
-            //m_texBackground = texBackGround;
         }
 
         public override void Update(GameTime gameTime)
         {
             m_spriteBatch.Begin();
-
-            //
-            // Draw a blue background
-            //Rectangle background = new Rectangle(OFFSET_X, OFFSET_Y, GRID_SIZE * CELL_SIZE, GRID_SIZE * CELL_SIZE);
-            //m_spriteBatch.Draw(m_texBackground, background, Color.Black);
 
             foreach (var entity in m_entities.Values)
             {
@@ -63,6 +52,7 @@ namespace Systems
             }
             else {
                 texture = baba.image;
+                appearance.frame = baba.directionInARow;
             }
             // compute source rectangle
             Nullable<Rectangle> sourceRectangle = appearance.sourceRectangle;

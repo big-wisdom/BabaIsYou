@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using System;
+using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 
 namespace BabaIsYou
@@ -12,15 +12,23 @@ namespace BabaIsYou
         private const int GRID_SIZE = 20;
         private readonly int WINDOW_WIDTH;
         private readonly int WINDOW_HEIGHT;
+        private Dictionary<Keys, Components.Direction> controls;
+        List<List<Entity>> gameBoard = new List<List<Entity>>();
+        KeyboardModel keyboard;
+
         private Systems.Renderer m_sysRenderer;
         //private Systems.Collision m_sysCollision;
-        //private Systems.Movement m_sysMovement;
-        //private Systems.KeyboardInput m_sysKeyboardInput;
+        private Systems.Movement m_sysMovement;
+        private Systems.KeyboardInput m_sysKeyboardInput;
 
-        public GameModel(int width, int height)
+        public Components.You youComponent;
+
+        public GameModel(int width, int height, Dictionary<Keys, Components.Direction> controls, KeyboardModel keyboard)
         {
             this.WINDOW_WIDTH = width;
             this.WINDOW_HEIGHT = height;
+            this.youComponent = new Components.You(controls);
+            this.keyboard = keyboard;
         }
 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch)
@@ -33,7 +41,15 @@ namespace BabaIsYou
                 { Components.Direction.Left, content.Load<Texture2D>("baba/bunnyLeft") }
             };
 
-            m_sysRenderer = new Systems.Renderer(spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, GRID_SIZE);
+            // initialize gameBoard
+            for (int y=0; y<GRID_SIZE; y++) {
+                gameBoard.Add(new List<Entity>());
+                for (int x=0; x<GRID_SIZE; x++) {
+                    gameBoard[y].Add(null);
+                }
+            }
+
+            m_sysRenderer = new Systems.Renderer(spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, gameBoard);
             //m_sysCollision = new Systems.Collision((entity) =>
             //{
             //    // Remove the existing food pill
@@ -41,16 +57,16 @@ namespace BabaIsYou
             //    // Need another food pill
             //    m_addThese.Add(createFood(texSquare));
             //});
-            //m_sysMovement = new Systems.Movement();
-            //m_sysKeyboardInput = new Systems.KeyboardInput();
+            m_sysMovement = new Systems.Movement(gameBoard, keyboard);
+            m_sysKeyboardInput = new Systems.KeyboardInput(keyboard);
 
             initializeBaba(babaTextures);
         }
 
         public void Update(GameTime gameTime)
         {
-            //m_sysKeyboardInput.Update(gameTime);
-            //m_sysMovement.Update(gameTime);
+            m_sysKeyboardInput.Update(gameTime);
+            m_sysMovement.Update(gameTime);
             //m_sysCollision.Update(gameTime);
 
             //foreach (var entity in m_removeThese)
@@ -73,23 +89,29 @@ namespace BabaIsYou
 
         private void AddEntity(Entity entity)
         {
-            //m_sysKeyboardInput.Add(entity);
-            //m_sysMovement.Add(entity);
+            Components.Position pos =  entity.GetComponent<Components.Position>();
+            gameBoard[pos.y][pos.x] = entity;
+
+            m_sysKeyboardInput.Add(entity);
+            m_sysMovement.Add(entity);
             //m_sysCollision.Add(entity);
             m_sysRenderer.Add(entity);
         }
 
         private void RemoveEntity(Entity entity)
         {
-            //m_sysKeyboardInput.Remove(entity.Id);
-            //m_sysMovement.Remove(entity.Id);
+            Components.Position pos =  entity.GetComponent<Components.Position>();
+            gameBoard[pos.y][pos.x] = null;
+
+            m_sysKeyboardInput.Remove(entity.Id);
+            m_sysMovement.Remove(entity.Id);
             //m_sysCollision.Remove(entity.Id);
             m_sysRenderer.Remove(entity.Id);
         }
 
         private void initializeBaba(Dictionary<Components.Direction, Texture2D> babaTextures)
         {
-            AddEntity(Baba.create(babaTextures, 5, 5));
+            AddEntity(Baba.create(babaTextures, 5, 5, youComponent));
         }
     }
 }

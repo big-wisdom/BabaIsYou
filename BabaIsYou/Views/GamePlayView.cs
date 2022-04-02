@@ -1,4 +1,5 @@
-﻿using BabaIsYou;
+﻿using System.Collections.Generic;
+using BabaIsYou;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Input;
@@ -7,12 +8,21 @@ namespace CS5410
 {
     public class GamePlayView : GameStateView
     {
+        Dictionary<Keys, Components.Direction> controls;
+        KeyboardModel keyboard;
+
+        public GamePlayView(Dictionary<Keys, Components.Direction> controls, KeyboardModel keyboard)
+        {
+            this.controls = controls;
+            this.keyboard = keyboard;
+        }
+
         ContentManager m_content;
         private GameModel m_gameModel;
 
         public override void initializeSession()
         {
-            m_gameModel = new GameModel(m_graphics.PreferredBackBufferWidth, m_graphics.PreferredBackBufferHeight);
+            m_gameModel = new GameModel(m_graphics.PreferredBackBufferWidth, m_graphics.PreferredBackBufferHeight, controls, keyboard);
             m_gameModel.Initialize(m_content, m_spriteBatch);
         }
 

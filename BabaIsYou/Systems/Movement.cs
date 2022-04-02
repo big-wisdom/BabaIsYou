@@ -1,5 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BabaIsYou;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace Systems
 {
@@ -9,71 +12,40 @@ namespace Systems
     /// </summary>
     class Movement : System
     {
-        public Movement()
+        List<List<Entities.Entity>> gameBoard;
+        KeyboardModel keyboard;
+
+        public Movement(List<List<Entities.Entity>> gameBoard, KeyboardModel keyboard)
             : base(
                   typeof(Components.Movable),
                   typeof(Components.Position)
                   )
         {
+            this.gameBoard = gameBoard;
+            this.keyboard = keyboard;
         }
 
-        public override void Update(GameTime gameTime)
-        {
-            foreach (var entity in m_entities.Values)
-            {
-                moveEntity(entity, gameTime);
-            }
-        }
-
-        private void moveEntity(Entities.Entity entity, GameTime gameTime)
-        {
-            var movable = entity.GetComponent<Components.Movable>();
-            movable.elapsedInterval += (uint)gameTime.ElapsedGameTime.TotalMilliseconds;
-            if (movable.elapsedInterval >= movable.moveInterval)
-            {
-                movable.elapsedInterval -= movable.moveInterval;
-                switch (movable.facing)
-                {
+        public override void Update(GameTime gameTime) { 
+            foreach (Entities.Entity e in m_entities.Values) { 
+                var movable = e.GetComponent<Components.Movable>();
+                var pos = e.GetComponent<Components.Position>();
+                Components.Direction direction = movable.movementDirection;
+                switch(direction) {
                     case Components.Direction.Up:
-                        move(entity, 0, -1);
-                        break;
-                    case Components.Direction.Down:
-                        move(entity, 0, 1);
-                        break;
-                    case Components.Direction.Left:
-                        move(entity, -1, 0);
+                        pos.y = pos.y - 1;
                         break;
                     case Components.Direction.Right:
-                        move(entity, 1, 0);
+                        pos.x = pos.x + 1;
+                        break;
+                    case Components.Direction.Down:
+                        pos.y = pos.y + 1;
+                        break;
+                    case Components.Direction.Left:
+                        pos.x = pos.x - 1;
                         break;
                 }
+                movable.movementDirection = Components.Direction.Stopped;
             }
-        }
-
-        private void move(Entities.Entity entity, int xIncrement, int yIncrement)
-        {
-            var movable = entity.GetComponent<Components.Movable>();
-            var position = entity.GetComponent<Components.Position>();
-
-            //
-            // Remember current front position, so it can be added back in as the move
-            var front = position.segments[0];
-
-            //
-            // Remove the tail, but only if there aren't new segments to add
-            if (movable.segmentsToAdd == 0 && position.segments.Count > 0)
-            {
-                position.segments.RemoveAt(position.segments.Count - 1);
-            }
-            else
-            {
-                movable.segmentsToAdd--;
-            }
-
-            //
-            // Update the front of the entity with the segment moving into the new spot
-            Point newFront = new Point(front.X + xIncrement, front.Y + yIncrement);
-            position.segments.Insert(0, newFront);
         }
     }
 }

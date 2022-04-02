@@ -1,6 +1,5 @@
 ﻿using Entities;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 
@@ -27,28 +26,28 @@ namespace Systems
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            var movable = findMovable(m_entities);
+            //var movable = findMovable(m_entities);
 
-            foreach (var entity in m_entities.Values)
-            {
-                foreach (var entityMovable in movable)
-                {
-                    if (collides(entity, entityMovable))
-                    {
-                        //
-                        // If food, that's okay
-                        if (entity.ContainsComponent<Components.Food>())
-                        {
-                            entityMovable.GetComponent<Components.Movable>().segmentsToAdd = 3;
-                            m_foodConsumed(entity);
-                        }
-                        else
-                        {
-                            entityMovable.GetComponent<Components.Movable>().facing = Components.Direction.Stopped;
-                        }
-                    }
-                }
-            }
+            //foreach (var entity in m_entities.Values)
+            //{
+            //    foreach (var entityMovable in movable)
+            //    {
+            //        if (collides(entity, entityMovable))
+            //        {
+            //            //
+            //            // If food, that's okay
+            //            if (entity.ContainsComponent<Components.Food>())
+            //            {
+            //                entityMovable.GetComponent<Components.Movable>().segmentsToAdd = 3;
+            //                m_foodConsumed(entity);
+            //            }
+            //            else
+            //            {
+            //                entityMovable.GetComponent<Components.Movable>().facing = Components.Direction.Stopped;
+            //            }
+            //        }
+            //    }
+            //}
         }
 
         /// <summary>
@@ -57,23 +56,23 @@ namespace Systems
         /// </summary>
         public bool collidesWithAny(Entity proposed)
         {
-            var aPosition = proposed.GetComponent<Components.Position>();
+            //var aPosition = proposed.GetComponent<Components.Position>();
 
-            foreach (var entity in m_entities.Values)
-            {
-                if (entity.ContainsComponent<Components.Collision>() && entity.ContainsComponent<Components.Position>())
-                {
-                    var ePosition = entity.GetComponent<Components.Position>();
+            //foreach (var entity in m_entities.Values)
+            //{
+            //    if (entity.ContainsComponent<Components.Collision>() && entity.ContainsComponent<Components.Position>())
+            //    {
+            //        var ePosition = entity.GetComponent<Components.Position>();
 
-                    foreach (var segment in ePosition.segments)
-                    {
-                        if (aPosition.x == segment.X && aPosition.y == segment.Y)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
+            //        foreach (var segment in ePosition.segments)
+            //        {
+            //            if (aPosition.x == segment.X && aPosition.y == segment.Y)
+            //            {
+            //                return true;
+            //            }
+            //        }
+            //    }
+            //}
 
             return false;
         }
@@ -103,27 +102,27 @@ namespace Systems
         /// </summary>
         private bool collides(Entity a, Entity b)
         {
-            var aPosition = a.GetComponent<Components.Position>();
-            var bPosition = b.GetComponent<Components.Position>();
+            //var aPosition = a.GetComponent<Components.Position>();
+            //var bPosition = b.GetComponent<Components.Position>();
 
-            //
-            // A movable can collide with itself: Check segment against the rest
-            if (a == b)
-            {
-                //
-                // Have to skip the first segment, that's why using a counted for loop
-                for (int segment = 1; segment < aPosition.segments.Count; segment++)
-                {
-                    if (aPosition.x == aPosition.segments[segment].X && aPosition.y == aPosition.segments[segment].Y)
-                    {
-                        return true;
-                    }
-                }
+            ////
+            //// A movable can collide with itself: Check segment against the rest
+            //if (a == b)
+            //{
+            //    //
+            //    // Have to skip the first segment, that's why using a counted for loop
+            //    for (int segment = 1; segment < aPosition.segments.Count; segment++)
+            //    {
+            //        if (aPosition.x == aPosition.segments[segment].X && aPosition.y == aPosition.segments[segment].Y)
+            //        {
+            //            return true;
+            //        }
+            //    }
 
-                return false;
-            }
+            return false;
+            //}
 
-            return aPosition.x == bPosition.x && aPosition.y == bPosition.y;
+            //return aPosition.x == bPosition.x && aPosition.y == bPosition.y;
         }
     }
 }
