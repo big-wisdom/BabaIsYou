@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Components
@@ -8,7 +9,9 @@ namespace Components
         public Texture2D image;
         public Color fill;
         public Color stroke;
-        public Rectangle sourceRectangle;
+        private Func<int, Rectangle> computeSourceRectangle;
+        private int frames;
+        public int frame { get; set; }
 
         public Appearance(Texture2D image, Color fill, Color stroke)
         {
@@ -17,12 +20,25 @@ namespace Components
             this.stroke = stroke;
         }
 
-        public Appearance(Texture2D image, Rectangle sourceRectangle, Color fill, Color stroke)
+        public Appearance(Texture2D image, Func<int, Rectangle> computeSourceRectangle, int frames, Color fill, Color stroke)
         {
             this.image = image;
-            this.sourceRectangle = sourceRectangle;
+            this.computeSourceRectangle = computeSourceRectangle;
+            this.frames = frames;
             this.fill = fill;
             this.stroke = stroke;
+        }
+
+        public void nextFrame() {
+            frame++;
+            if (frame == frames) frame = 0;
+        }
+
+        public Nullable<Rectangle> sourceRectangle { 
+            get {
+                if (computeSourceRectangle == null) return null;
+                return computeSourceRectangle(frame);
+            }
         }
     }
 }

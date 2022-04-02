@@ -3,6 +3,8 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using System;
+using System.Collections.Generic;
+
 namespace BabaIsYou
 {
     public class GameModel
@@ -23,7 +25,13 @@ namespace BabaIsYou
 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch)
         {
-            var babaTexture = content.Load<Texture2D>("baba/bunnyLeft");
+            // create a dictionary that links directions to textures for baba
+            var babaTextures = new Dictionary<Components.Direction, Texture2D>() {
+                { Components.Direction.Up, content.Load<Texture2D>("baba/bunnyUp") },
+                { Components.Direction.Right, content.Load<Texture2D>("baba/bunnyRight") },
+                { Components.Direction.Down, content.Load<Texture2D>("baba/bunnyDown") },
+                { Components.Direction.Left, content.Load<Texture2D>("baba/bunnyLeft") }
+            };
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, GRID_SIZE);
             //m_sysCollision = new Systems.Collision((entity) =>
@@ -36,7 +44,7 @@ namespace BabaIsYou
             //m_sysMovement = new Systems.Movement();
             //m_sysKeyboardInput = new Systems.KeyboardInput();
 
-            initializeBaba(babaTexture);
+            initializeBaba(babaTextures);
         }
 
         public void Update(GameTime gameTime)
@@ -79,9 +87,9 @@ namespace BabaIsYou
             m_sysRenderer.Remove(entity.Id);
         }
 
-        private void initializeBaba(Texture2D baba)
+        private void initializeBaba(Dictionary<Components.Direction, Texture2D> babaTextures)
         {
-            AddEntity(Baba.create(baba, 5, 5));
+            AddEntity(Baba.create(babaTextures, 5, 5));
         }
     }
 }

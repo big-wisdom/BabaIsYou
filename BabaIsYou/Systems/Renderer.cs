@@ -1,4 +1,5 @@
-﻿using Entities;
+﻿using System;
+using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -46,6 +47,8 @@ namespace Systems
         {
             var appearance = entity.GetComponent<Components.Appearance>();
             var position = entity.GetComponent<Components.Position>();
+            var baba = entity.GetComponent<Components.BabaComponent>();
+
             Rectangle area = new Rectangle();
 
             area.X = position.x * CELL_SIZE;
@@ -53,14 +56,25 @@ namespace Systems
             area.Width = CELL_SIZE;
             area.Height = CELL_SIZE;
 
+            // compute texture
+            Texture2D texture;
+            if (baba == null) {
+                texture = appearance.image;
+            }
+            else {
+                texture = baba.image;
+            }
+            // compute source rectangle
+            Nullable<Rectangle> sourceRectangle = appearance.sourceRectangle;
+
+            // if there is a sourceRectangle, use it
             if (appearance.sourceRectangle != null)
             {
-                Rectangle sourceRectangle = appearance.sourceRectangle;
-                m_spriteBatch.Draw(appearance.image, area, sourceRectangle, appearance.stroke);
+                m_spriteBatch.Draw(texture, area, sourceRectangle, appearance.stroke);
             }
             else
             {
-                m_spriteBatch.Draw(appearance.image, area, appearance.stroke);
+                m_spriteBatch.Draw(texture, area, appearance.stroke);
             }
 
             
