@@ -30,10 +30,11 @@ namespace Systems
 
                 foreach (var key in keyboard.GetUnlockedKeys())
                 {
-                    if (input.controls.ContainsKey(key))
+                    Nullable<Components.Direction> control = input.controls.getControl(key);
+                    if (control != null)
                     {
-                        movable.movementDirection  = input.controls[key];
-                        if (baba != null) baba.direction = input.controls[key];
+                        movable.movementDirection  = control.Value;
+                        if (baba != null) baba.direction = control.Value;
                         keyboard.lockKey(key);
                     }
                 }

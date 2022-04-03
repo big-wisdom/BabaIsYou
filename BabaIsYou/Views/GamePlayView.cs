@@ -8,10 +8,10 @@ namespace CS5410
 {
     public class GamePlayView : GameStateView
     {
-        Dictionary<Keys, Components.Direction> controls;
+        Controls controls;
         KeyboardModel keyboard;
 
-        public GamePlayView(Dictionary<Keys, Components.Direction> controls, KeyboardModel keyboard)
+        public GamePlayView(Controls controls, KeyboardModel keyboard)
         {
             this.controls = controls;
             this.keyboard = keyboard;

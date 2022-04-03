@@ -15,13 +15,7 @@ namespace CS5410
         private Dictionary<GameStateEnum, IGameState> m_states;
         public KeyboardModel keyboard = new KeyboardModel();
 
-        public Dictionary<Keys, Components.Direction> controls = new Dictionary<Keys, Components.Direction>()
-        {
-            { Keys.Up, Direction.Up },
-            { Keys.Right, Direction.Right },
-            { Keys.Down, Direction.Down },
-            { Keys.Left, Direction.Left },
-        };
+        public Controls controls = new Controls();
 
         public BabaIsYou()
         {

@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using Microsoft.Xna.Framework.Input;
+﻿using BabaIsYou;
 
 namespace Components
 {
     public class You: Component
     {
-        public Dictionary<Keys, Direction> controls;
+        public Controls controls;
 
-        public You(Dictionary<Keys, Direction> controls)
+        public You(Controls controls)
         {
             this.controls = controls;
         }

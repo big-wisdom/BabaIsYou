@@ -23,7 +23,7 @@ namespace BabaIsYou
 
         public Components.You youComponent;
 
-        public GameModel(int width, int height, Dictionary<Keys, Components.Direction> controls, KeyboardModel keyboard)
+        public GameModel(int width, int height, Controls controls, KeyboardModel keyboard)
         {
             this.WINDOW_WIDTH = width;
             this.WINDOW_HEIGHT = height;

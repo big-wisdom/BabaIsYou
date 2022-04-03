@@ -13,9 +13,8 @@ namespace CS5410
         private SpriteFont m_font;
         private const string MESSAGE = "This is how to play the game";
 
-        private Dictionary<Keys, Components.Direction> keyFirstControls;
-        private Dictionary<Components.Direction, Keys> controlFirstControls;
-        private List<Components.Direction> controls;
+        private Controls controls;
+        private List<Components.Direction> controlsList;
 
         KeyboardModel keyboard;
         Components.Direction selectedControl;
@@ -25,16 +24,15 @@ namespace CS5410
         private bool setLock = false;
         private bool error = false;
 
-        public SettingsView(Dictionary<Keys, Components.Direction> controls, KeyboardModel keyboard) {
-            this.keyFirstControls = controls;
-            this.controlFirstControls = swapDictionary<Keys, Components.Direction>(controls);
+        public SettingsView(Controls controls, KeyboardModel keyboard) {
+            this.controls = controls;
+            this.controlsList = controls.controlsList;
 
-            this.controls = new List<Components.Direction>(controls.Values);
             this.selectedIndex = 0;
-            selectedControl = this.controls[selectedIndex];
+            selectedControl = this.controlsList[selectedIndex];
 
             // initialize set dictionary
-            foreach (Components.Direction d in this.controls) {
+            foreach (Components.Direction d in this.controlsList) {
                 set[d] = false;
             }
 
@@ -58,23 +56,17 @@ namespace CS5410
                         {
                             List<Keys> pressedKeys = keyboard.GetUnlockedKeys();
                             if (pressedKeys.Count > 0)
-                            { 
-                                Keys oldKey = controlFirstControls[control];
-                                controlFirstControls[control] = pressedKeys[0];
-                                Dictionary<Keys, Components.Direction> potential = swapDictionary<Components.Direction, Keys>(controlFirstControls);
-                                if (potential != null)
-                                {
+                            {
+                                Keys oldKey = controls.getKey(control); // this should never be null
+                                if (controls.setControl(pressedKeys[0], control))
+                                { 
                                     set[control] = false;
                                     setLock = false;
                                     error = false;
-                                    keyFirstControls = potential;
                                     // saveSomething();
-                                    // gameView.controls = potential; // TODO: this line is supposed to make this effect globally
                                     break;
                                 }
-                                else
-                                {
-                                    controlFirstControls[control] = oldKey; // reset the control
+                                else {
                                     error = true;
                                 }
                             }
@@ -101,11 +93,11 @@ namespace CS5410
                     }
 
                     if (selectedIndex < 0)
-                        selectedIndex = this.controls.Count - 1;
-                    if (selectedIndex == this.controls.Count)
+                        selectedIndex = this.controlsList.Count - 1;
+                    if (selectedIndex == this.controlsList.Count)
                         selectedIndex = 0;
 
-                    selectedControl = this.controls[selectedIndex];
+                    selectedControl = this.controlsList[selectedIndex];
 
                     // select one to edit
                     if (k == Keys.Enter)
@@ -125,7 +117,7 @@ namespace CS5410
 
             float bottom = 200;
             float previousBottom = bottom;
-            foreach (Components.Direction d in controlFirstControls.Keys) {
+            foreach (Components.Direction d in controlsList) {
                 String textPart2;
                 if (setLock)
                 { 
@@ -138,12 +130,12 @@ namespace CS5410
                     }
                     else
                     { 
-                        textPart2 = controlFirstControls[d].ToString();
+                        textPart2 = controls.getKey(d).ToString();
                     }
                 }
                 else
                 {
-                    textPart2 = controlFirstControls[d].ToString();
+                    textPart2 = controls.getKey(d).ToString();
                 }
                 String text = d.ToString() + ": " + textPart2;
 
@@ -174,21 +166,5 @@ namespace CS5410
             return y + stringSize.Y;
         }
 
-        private Dictionary<TValue, TKey> swapDictionary<TKey, TValue>(Dictionary<TKey, TValue> source)
-        {
-            Dictionary<TValue, TKey> result = new Dictionary<TValue, TKey>();
-            foreach (var entry in source)
-            {
-                if (!result.ContainsKey(entry.Value))
-                {
-                    result.Add(entry.Value, entry.Key); // in case there are duplicate values in the original (should't be a problem here)
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            return result;
-        }
     }
 }
