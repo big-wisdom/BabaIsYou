@@ -39,7 +39,7 @@ namespace CS5410
 
             // Create all the game states here
             m_states = new Dictionary<GameStateEnum, IGameState>();
-            m_states.Add(GameStateEnum.MainMenu, new MainMenuView());
+            m_states.Add(GameStateEnum.MainMenu, new MainMenuView(keyboard));
             m_states.Add(GameStateEnum.GamePlay, new GamePlayView(controls, keyboard));
             m_states.Add(GameStateEnum.HighScores, new HighScoresView());
             m_states.Add(GameStateEnum.Help, new SettingsView(controls, keyboard));

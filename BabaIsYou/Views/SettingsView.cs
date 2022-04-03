@@ -21,12 +21,23 @@ namespace CS5410
         Components.Direction selectedControl;
         private int selectedIndex;
 
+        Dictionary<Components.Direction, bool> set = new Dictionary<Components.Direction, bool>();
+        private bool setLock = false;
+        private bool error = false;
+
         public SettingsView(Dictionary<Keys, Components.Direction> controls, KeyboardModel keyboard) {
             this.keyFirstControls = controls;
             this.controlFirstControls = swapDictionary<Keys, Components.Direction>(controls);
+
             this.controls = new List<Components.Direction>(controls.Values);
             this.selectedIndex = 0;
             selectedControl = this.controls[selectedIndex];
+
+            // initialize set dictionary
+            foreach (Components.Direction d in this.controls) {
+                set[d] = false;
+            }
+
             this.keyboard = keyboard;
         }
 
@@ -38,29 +49,72 @@ namespace CS5410
         public override GameStateEnum processInput(GameTime gameTime)
         {
             foreach (Keys k in keyboard.GetUnlockedKeys())
-            { 
-                if (k == Keys.Escape)
+            {
+                if (setLock)
                 {
-                    return GameStateEnum.MainMenu;
+                    foreach (Components.Direction control in set.Keys)
+                    {
+                        if (set[control])
+                        {
+                            List<Keys> pressedKeys = keyboard.GetUnlockedKeys();
+                            if (pressedKeys.Count > 0)
+                            { 
+                                Keys oldKey = controlFirstControls[control];
+                                controlFirstControls[control] = pressedKeys[0];
+                                Dictionary<Keys, Components.Direction> potential = swapDictionary<Components.Direction, Keys>(controlFirstControls);
+                                if (potential != null)
+                                {
+                                    set[control] = false;
+                                    setLock = false;
+                                    error = false;
+                                    keyFirstControls = potential;
+                                    // saveSomething();
+                                    // gameView.controls = potential; // TODO: this line is supposed to make this effect globally
+                                    break;
+                                }
+                                else
+                                {
+                                    controlFirstControls[control] = oldKey; // reset the control
+                                    error = true;
+                                }
+                            }
+                        }
+                    }
                 }
-
-                if (k == Keys.Up)
+                else
                 { 
-                    selectedIndex--;
-                    keyboard.lockKey(Keys.Up);
-                }
-                if (k == Keys.Down)
-                { 
-                    selectedIndex++;
-                    keyboard.lockKey(Keys.Down);
-                }
+                    // Menu Navigation
+                    if (k == Keys.Escape)
+                    {
+                        return GameStateEnum.MainMenu;
+                    }
 
-                if (selectedIndex < 0)
-                    selectedIndex = this.controls.Count - 1;
-                if (selectedIndex == this.controls.Count)
-                    selectedIndex = 0;
+                    if (k == Keys.Up)
+                    { 
+                        selectedIndex--;
+                        keyboard.lockKey(Keys.Up);
+                    }
+                    if (k == Keys.Down)
+                    { 
+                        selectedIndex++;
+                        keyboard.lockKey(Keys.Down);
+                    }
 
-                selectedControl = this.controls[selectedIndex];
+                    if (selectedIndex < 0)
+                        selectedIndex = this.controls.Count - 1;
+                    if (selectedIndex == this.controls.Count)
+                        selectedIndex = 0;
+
+                    selectedControl = this.controls[selectedIndex];
+
+                    // select one to edit
+                    if (k == Keys.Enter)
+                    {
+                        setLock = true;
+                        set[selectedControl] = true;
+                        keyboard.lockKey(Keys.Enter);
+                    }
+                }
             }
             return GameStateEnum.Help;
         }
@@ -72,7 +126,27 @@ namespace CS5410
             float bottom = 200;
             float previousBottom = bottom;
             foreach (Components.Direction d in controlFirstControls.Keys) {
-                String text = d.ToString() + ": " + controlFirstControls[d].ToString();
+                String textPart2;
+                if (setLock)
+                { 
+                    if (set[d])
+                    {
+                        if (error)
+                            textPart2 = "Please enter a unique key";
+                        else
+                            textPart2 = "Press any key to set";
+                    }
+                    else
+                    { 
+                        textPart2 = controlFirstControls[d].ToString();
+                    }
+                }
+                else
+                {
+                    textPart2 = controlFirstControls[d].ToString();
+                }
+                String text = d.ToString() + ": " + textPart2;
+
                 bottom = drawMenuItem(
                     m_font, 
                     text,

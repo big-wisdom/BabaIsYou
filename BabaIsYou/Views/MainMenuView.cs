@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using BabaIsYou;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -9,6 +10,7 @@ namespace CS5410
     {
         private SpriteFont m_fontMenu;
         private SpriteFont m_fontMenuSelect;
+        private KeyboardModel keyboard;
 
         private enum MenuState
         {
@@ -21,6 +23,11 @@ namespace CS5410
 
         private MenuState m_currentSelection = MenuState.NewGame;
         private bool m_waitForKeyRelease = false;
+
+        public MainMenuView(KeyboardModel keyboard)
+        {
+            this.keyboard = keyboard;
+        }
 
         public override void loadContent(ContentManager contentManager)
         {
@@ -55,6 +62,7 @@ namespace CS5410
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == MenuState.Help)
                 {
+                    keyboard.lockKey(Keys.Enter);
                     return GameStateEnum.Help;
                 }
                 if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == MenuState.About)
