@@ -13,7 +13,7 @@ namespace BabaIsYou
         private readonly int WINDOW_WIDTH;
         private readonly int WINDOW_HEIGHT;
         private Dictionary<Keys, Components.Direction> controls;
-        List<List<Entity>> gameBoard = new List<List<Entity>>();
+        GameBoard gameBoard;
         KeyboardModel keyboard;
 
         private Systems.Renderer m_sysRenderer;
@@ -42,12 +42,8 @@ namespace BabaIsYou
             };
 
             // initialize gameBoard
-            for (int y=0; y<GRID_SIZE; y++) {
-                gameBoard.Add(new List<Entity>());
-                for (int x=0; x<GRID_SIZE; x++) {
-                    gameBoard[y].Add(null);
-                }
-            }
+            gameBoard = new GameBoard(GRID_SIZE);
+
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, gameBoard);
             //m_sysCollision = new Systems.Collision((entity) =>
@@ -89,8 +85,7 @@ namespace BabaIsYou
 
         private void AddEntity(Entity entity)
         {
-            Components.Position pos =  entity.GetComponent<Components.Position>();
-            gameBoard[pos.y][pos.x] = entity;
+            gameBoard.addEntity(entity);
 
             m_sysKeyboardInput.Add(entity);
             m_sysMovement.Add(entity);
@@ -100,8 +95,7 @@ namespace BabaIsYou
 
         private void RemoveEntity(Entity entity)
         {
-            Components.Position pos =  entity.GetComponent<Components.Position>();
-            gameBoard[pos.y][pos.x] = null;
+            gameBoard.removeEntity(entity);
 
             m_sysKeyboardInput.Remove(entity.Id);
             m_sysMovement.Remove(entity.Id);

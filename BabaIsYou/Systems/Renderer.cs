@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using BabaIsYou;
 using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -13,10 +14,10 @@ namespace Systems
         private readonly int CELL_SIZE;
         private readonly SpriteBatch m_spriteBatch;
 
-        public Renderer(SpriteBatch spriteBatch, int width, int height, List<List<Entities.Entity>> gameBoard) :
+        public Renderer(SpriteBatch spriteBatch, int width, int height, GameBoard gameBoard) :
             base(typeof(Components.Appearance), typeof(Components.Position))
         {
-            CELL_SIZE = height / gameBoard.Count;
+            CELL_SIZE = height / gameBoard.GRID_SIZE;
             m_spriteBatch = spriteBatch;
         }
 

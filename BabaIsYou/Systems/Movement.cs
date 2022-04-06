@@ -12,10 +12,10 @@ namespace Systems
     /// </summary>
     class Movement : System
     {
-        List<List<Entities.Entity>> gameBoard;
+        GameBoard gameBoard;
         KeyboardModel keyboard;
 
-        public Movement(List<List<Entities.Entity>> gameBoard, KeyboardModel keyboard)
+        public Movement(GameBoard gameBoard, KeyboardModel keyboard)
             : base(
                   typeof(Components.Movable),
                   typeof(Components.Position)
