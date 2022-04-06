@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.IsolatedStorage;
+using System.Threading.Tasks;
+using System.Xml.Serialization;
 using Components;
 using Microsoft.Xna.Framework.Input;
 
@@ -18,7 +22,7 @@ namespace BabaIsYou
         private Dictionary<Direction, Keys> controlFirstControls;
 
 
-        public List<Direction> controlsList { 
+        public List<Direction> controlsList {
             get {
                 return new List<Direction>(keyFirstControls.Values);
             }
@@ -26,7 +30,17 @@ namespace BabaIsYou
 
         public Controls()
         {
-            this.controlFirstControls = swapDictionary<Keys, Direction>(keyFirstControls);
+            // initialize from file if it exists,
+            loadSomething();
+
+            // otherwise initialize defaults and persist them
+            // this.controlFirstControls = swapDictionary<Keys, Direction>(keyFirstControls);
+        }
+
+        private void initializeDefaults()
+        {
+            controlFirstControls = swapDictionary<Keys, Direction>(keyFirstControls);
+            saveSomething();
         }
 
         public Nullable<Direction> getControl(Keys key)
@@ -77,5 +91,102 @@ namespace BabaIsYou
             }
             return result;
         }
+
+        private bool saving = false;
+        private void saveSomething()
+        {
+            lock (this)
+            {
+                if (!this.saving)
+                {
+                    this.saving = true;
+                    //
+                    // Create something to save
+                    finalizeSaveAsync(ControlsPersist.fromDictionary(controlFirstControls));
+                }
+            }
+        }
+
+        private async void finalizeSaveAsync(ControlsPersist state)
+        {
+            await Task.Run(() =>
+            {
+                using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    try
+                    {
+                        using (IsolatedStorageFileStream fs = storage.OpenFile("Controls.xml", FileMode.OpenOrCreate))
+                        {
+                            if (fs != null)
+                            {
+                                XmlSerializer mySerializer = new XmlSerializer(typeof(ControlsPersist));
+                                mySerializer.Serialize(fs, state);
+                            }
+                        }
+                    }
+                    catch (IsolatedStorageException)
+                    {
+                        throw new Exception("Controls.xml does not exist");
+                        // Ideally show something to the user, but this is demo code :)
+                    }
+                }
+
+                this.saving = false;
+            });
+        }
+
+        private bool loading = false;
+        private void loadSomething()
+        {
+            lock (this)
+            {
+                if (!this.loading)
+                {
+                    this.loading = true;
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                    finalizeLoadAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+                }
+            }
+        }
+        private ControlsPersist m_loadedState = null;
+
+
+        private async Task finalizeLoadAsync()
+        {
+            await Task.Run(() =>
+            {
+                using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    try
+                    {
+                        if (storage.FileExists("Controls.xml"))
+                        {
+                            using (IsolatedStorageFileStream fs = storage.OpenFile("Controls.xml", FileMode.Open))
+                            {
+                                if (fs != null)
+                                {
+                                    XmlSerializer mySerializer = new XmlSerializer(typeof(ControlsPersist));
+                                    m_loadedState = (ControlsPersist)mySerializer.Deserialize(fs);
+                                    controlFirstControls = m_loadedState.ControlsFirstDictionary();
+                                    keyFirstControls = swapDictionary<Direction, Keys>(controlFirstControls);
+                                }
+                            }
+                        }
+                        else
+                        {
+                            initializeDefaults();
+                        }
+                    }
+                    catch (IsolatedStorageException)
+                    {
+                        // Ideally show something to the user, but this is demo code :)
+                    }
+                }
+
+                this.loading = false;
+            });
+        }
+
     }
 }
