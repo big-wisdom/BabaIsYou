@@ -41,8 +41,13 @@ namespace BabaIsYou
                 { Components.Direction.Left, content.Load<Texture2D>("baba/bunnyLeft") }
             };
 
+            var images = new Dictionary<char, Texture2D>()
+            {
+                { 'h', content.Load<Texture2D>("hedge") }
+            };
+
             // initialize gameBoard
-            gameBoard = new GameBoard(GRID_SIZE);
+            gameBoard = new GameBoard(GRID_SIZE, images);
 
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, gameBoard);
