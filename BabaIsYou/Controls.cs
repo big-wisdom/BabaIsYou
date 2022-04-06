@@ -30,16 +30,19 @@ namespace BabaIsYou
 
         public Controls()
         {
-            // initialize from file if it exists,
-            loadSomething();
-
-            // otherwise initialize defaults and persist them
-            // this.controlFirstControls = swapDictionary<Keys, Direction>(keyFirstControls);
+            loadSomething(); // initialize controls from local storage file
+            // loadSomething also calls saveSomething if nothing is there which
+            // will persist the current state of the controls
         }
 
         private void initializeDefaults()
         {
             controlFirstControls = swapDictionary<Keys, Direction>(keyFirstControls);
+            saveSomething();
+        }
+
+        public void persist()
+        {
             saveSomething();
         }
 
@@ -115,7 +118,7 @@ namespace BabaIsYou
                 {
                     try
                     {
-                        using (IsolatedStorageFileStream fs = storage.OpenFile("Controls.xml", FileMode.OpenOrCreate))
+                        using (IsolatedStorageFileStream fs = storage.OpenFile("Controls.xml", FileMode.Create))
                         {
                             if (fs != null)
                             {
@@ -158,6 +161,7 @@ namespace BabaIsYou
             {
                 using (IsolatedStorageFile storage = IsolatedStorageFile.GetUserStoreForApplication())
                 {
+                    // storage.Remove();
                     try
                     {
                         if (storage.FileExists("Controls.xml"))

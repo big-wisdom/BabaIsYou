@@ -63,6 +63,7 @@ namespace CS5410
                                     set[control] = false;
                                     setLock = false;
                                     error = false;
+                                    controls.persist();
                                     // saveSomething();
                                     break;
                                 }
