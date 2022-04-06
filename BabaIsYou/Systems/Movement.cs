@@ -29,6 +29,7 @@ namespace Systems
             foreach (Entities.Entity e in m_entities.Values) { 
                 var movable = e.GetComponent<Components.Movable>();
                 var pos = e.GetComponent<Components.Position>();
+                gameBoard.removeEntity(e); // remove the entity from it's old position
                 Components.Direction direction = movable.movementDirection;
                 switch(direction) {
                     case Components.Direction.Up:
@@ -44,6 +45,7 @@ namespace Systems
                         pos.x = pos.x - 1;
                         break;
                 }
+                gameBoard.addEntity(e); // add the entity back in it's new position
                 movable.movementDirection = Components.Direction.Stopped;
             }
         }
