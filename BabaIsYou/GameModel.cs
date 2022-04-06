@@ -12,7 +12,6 @@ namespace BabaIsYou
         private const int GRID_SIZE = 20;
         private readonly int WINDOW_WIDTH;
         private readonly int WINDOW_HEIGHT;
-        private Dictionary<Keys, Components.Direction> controls;
         GameBoard gameBoard;
         KeyboardModel keyboard;
 
@@ -43,11 +42,12 @@ namespace BabaIsYou
 
             var images = new Dictionary<char, Texture2D>()
             {
-                { 'h', content.Load<Texture2D>("hedge") }
+                { 'h', content.Load<Texture2D>("objects/hedge") },
+                { 'w', content.Load<Texture2D>("objects/wall") },
             };
 
             // initialize gameBoard
-            gameBoard = new GameBoard(GRID_SIZE, images);
+            gameBoard = new GameBoard(GRID_SIZE, images, babaTextures, youComponent);
 
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, gameBoard);
@@ -61,7 +61,7 @@ namespace BabaIsYou
             m_sysMovement = new Systems.Movement(gameBoard, keyboard);
             m_sysKeyboardInput = new Systems.KeyboardInput(keyboard);
 
-            initializeBaba(babaTextures);
+            initializeEntities();
         }
 
         public void Update(GameTime gameTime)
@@ -108,9 +108,12 @@ namespace BabaIsYou
             m_sysRenderer.Remove(entity.Id);
         }
 
-        private void initializeBaba(Dictionary<Components.Direction, Texture2D> babaTextures)
+        private void initializeEntities()
         {
-            AddEntity(Baba.create(babaTextures, 5, 5, youComponent));
+            foreach (Entity e in gameBoard.getEntities())
+            {
+                AddEntity(e);
+            }
         }
     }
 }

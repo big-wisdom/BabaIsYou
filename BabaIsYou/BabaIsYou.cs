@@ -24,8 +24,8 @@ namespace CS5410
 
         protected override void Initialize()
         {
-            m_graphics.PreferredBackBufferWidth = 1280;
-            m_graphics.PreferredBackBufferHeight = 800;
+            m_graphics.PreferredBackBufferWidth = 480;
+            m_graphics.PreferredBackBufferHeight = 480;
 
             m_graphics.ApplyChanges();
 

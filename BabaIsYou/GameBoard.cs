@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using BabaIsYou.Entities;
 using Microsoft.Xna.Framework.Graphics;
+using Components;
 
 namespace BabaIsYou
 {
@@ -15,11 +16,15 @@ namespace BabaIsYou
         List<List<Entity>> gameBoard = new List<List<Entity>>();
         public int GRID_SIZE;
         Dictionary<char, Texture2D> images;
+        Dictionary<Direction, Texture2D> babaTextures;
+        You you;
 
-        public GameBoard(int GRID_SIZE, Dictionary<char, Texture2D> images)
+        public GameBoard(int GRID_SIZE, Dictionary<char, Texture2D> images, Dictionary<Direction, Texture2D> babaTextures, You you)
         {
             this.GRID_SIZE = GRID_SIZE;
             this.images = images;
+            this.babaTextures = babaTextures;
+            this.you = you;
 
             for (int y=0; y<GRID_SIZE; y++) {
                 gameBoard.Add(new List<Entity>());
@@ -64,16 +69,17 @@ namespace BabaIsYou
 
         private Entity getEntity(char c, int x, int y)
         {
-            switch(c)
+            Debug.Write("Char: " + c + " ");
+            switch (c)
             {
-                //case 'w':
-                //    return Wall.create();
+                case 'w':
+                    return Wall.create(images[c], x, y);
                 //case 'r':
                 //    return Rock.create();
                 //case 'f':
                 //    return Flag.create();
-                //case 'b':
-                //    return Baba.create();
+                case 'b':
+                    return Baba.create(babaTextures, x, y, you);
                 //case 'l':
                 //    return Floor.create();
                 //case 'g':
@@ -85,20 +91,40 @@ namespace BabaIsYou
                 case 'h':
                     return Hedge.create(images[c], x, y);
                 default:
-                    throw new Exception("Unknown entity type while reading in file");
+                    return null;
             }
         }
 
         public void addEntity(Entity entity)
-        { 
-            Components.Position pos =  entity.GetComponent<Components.Position>();
-            gameBoard[pos.y][pos.x] = entity;
+        {
+            Debug.WriteLine("Adding Entity:" + entity);
+            if (entity != null)
+            {
+                Components.Position pos = entity.GetComponent<Components.Position>();
+                gameBoard[pos.y][pos.x] = entity;
+            }
         }
 
         public void removeEntity(Entity entity)
         { 
             Components.Position pos =  entity.GetComponent<Components.Position>();
             gameBoard[pos.y][pos.x] = null;
+        }
+
+        public List<Entity> getEntities()
+        {
+            List<Entity> entities = new List<Entity>();
+            foreach (List<Entity> row in gameBoard)
+            {
+                foreach (Entity e in row)
+                {
+                    if (e != null)
+                    {
+                        entities.Add(e);
+                    }
+                }
+            }
+            return entities;
         }
     }
 }
