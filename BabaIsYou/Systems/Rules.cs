@@ -58,20 +58,26 @@ namespace Systems
             }
 
             // validate sentences
+            List<List<Words>> removeSentences = new List<List<Words>>();
             foreach (List<Words> sentence in sentences)
             {
-                if (sentence.Count == 3)
+                if (!(sentence.Count == 3) || !validSentence(sentence))
                 {
-                    Debug.Write("Sentence: ");
-                    foreach (Words word in sentence)
-                    {
-                        Debug.Write(word.ToString() + " ");
-                    }
-                    Debug.Write("\n");
+                    removeSentences.Add(sentence);
                 }
-
             }
+            foreach (List<Words> sentence in removeSentences) sentences.Remove(sentence);
+
             // apply components
+            foreach (List<Words> sentence in sentences)
+            { 
+                // apply components
+                foreach (Words word in sentence)
+                {
+                    Debug.Write(word + " ");
+                }
+                Debug.Write("\n");
+            }
         }
 
         private List<List<Words>> getSentencesStartingWith(Entity e)
@@ -111,6 +117,52 @@ namespace Systems
                     }
 
                 }
+            }
+        }
+
+        private bool validSentence(List<Words> sentence)
+        {;
+            // first should be object
+            if (!isObject(sentence[0])) return false;
+
+            // second should be is
+            if (!(sentence[1] == Words.Is)) return false;
+
+            // third should be object or quality
+            if (!isObject(sentence[2]) && !isQuality(sentence[2]))
+                return false;
+
+            return true;
+        }
+
+        private bool isObject(Words word)
+        { 
+            switch(word)
+            {
+                case Words.Wall:
+                case Words.Baba:
+                case Words.Flag:
+                case Words.Rock:
+                case Words.Water:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private bool isQuality(Words word)
+        { 
+            switch(word)
+            {
+                case Words.Kill:
+                case Words.Push:
+                case Words.Sink:
+                case Words.Stop:
+                case Words.Win:
+                case Words.You:
+                    return true;
+                default:
+                    return false;
             }
         }
     }
