@@ -3,9 +3,9 @@ using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BabaIsYou.Entities
+namespace BabaIsYou.Entities.words
 {
-    class Flag
+    class WordFlag
     {
         public static Entity create(Texture2D image, int x, int y)
         {

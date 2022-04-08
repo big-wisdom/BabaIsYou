@@ -46,6 +46,23 @@ namespace BabaIsYou
                 { 'w', content.Load<Texture2D>("objects/wall") },
                 { 'r', content.Load<Texture2D>("objects/rock") },
                 { 'f', content.Load<Texture2D>("objects/flag") },
+                { 'a', content.Load<Texture2D>("objects/water") },
+                { 'g', content.Load<Texture2D>("objects/grass") },
+                { 'l', content.Load<Texture2D>("objects/floor") },
+                { 'v', content.Load<Texture2D>("objects/lava") },
+                { 'B', content.Load<Texture2D>("words/word-baba") },
+                { 'F', content.Load<Texture2D>("words/word-flag") },
+                { 'I', content.Load<Texture2D>("words/word-is") },
+                { 'K', content.Load<Texture2D>("words/word-kill") },
+                { 'V', content.Load<Texture2D>("words/word-lava") },
+                { 'P', content.Load<Texture2D>("words/word-push") },
+                { 'R', content.Load<Texture2D>("words/word-rock") },
+                { 'N', content.Load<Texture2D>("words/word-sink") },
+                { 'S', content.Load<Texture2D>("words/word-stop") },
+                { 'W', content.Load<Texture2D>("words/word-wall") },
+                { 'A', content.Load<Texture2D>("words/word-water") },
+                { 'X', content.Load<Texture2D>("words/word-win") },
+                { 'Y', content.Load<Texture2D>("words/word-you") },
             };
 
             // initialize gameBoard

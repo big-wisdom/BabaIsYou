@@ -3,19 +3,19 @@ using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace BabaIsYou.Entities
+namespace BabaIsYou.Entities.words
 {
-    class Flag
+    class WordStop
     {
         public static Entity create(Texture2D image, int x, int y)
         {
-            var flag = new Entity();
+            var stop = new Entity();
 
-            flag.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
-            flag.Add(new Position(x, y));
-            flag.Add(new Collision());
+            stop.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
+            stop.Add(new Position(x, y));
+            stop.Add(new Collision());
 
-            return flag;
+            return stop;
         }
 
         private static Rectangle computeSourceRectangle(int frame)

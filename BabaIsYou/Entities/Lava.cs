@@ -5,17 +5,17 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace BabaIsYou.Entities
 {
-    class Flag
+    class Lava
     {
         public static Entity create(Texture2D image, int x, int y)
         {
-            var flag = new Entity();
+            var lava = new Entity();
 
-            flag.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
-            flag.Add(new Position(x, y));
-            flag.Add(new Collision());
+            lava.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
+            lava.Add(new Position(x, y));
+            lava.Add(new Collision());
 
-            return flag;
+            return lava;
         }
 
         private static Rectangle computeSourceRectangle(int frame)

@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
+﻿using System.Collections.Generic;
 using Entities;
-using System.Runtime.CompilerServices;
 using Microsoft.Xna.Framework;
 using BabaIsYou.Entities;
 using Microsoft.Xna.Framework.Graphics;
 using Components;
+using BabaIsYou.Entities.words;
 
 namespace BabaIsYou
 {
@@ -47,11 +44,12 @@ namespace BabaIsYou
             Vector2 dimensions = new Vector2(int.Parse(dims[0]), int.Parse(dims[1]));
 
             // read in background items
-            for (int i=0; i<dimensions.Y; i++)
+            for (int y = 0; y < dimensions.Y; y++)
             {
                 line = stream.ReadLine();
-                foreach (char c in line)
+                for (int x = 0; x < dimensions.X; x++)
                 {
+                    addEntity(getEntity(line[x], x, y));
                 }
             }
 
@@ -75,19 +73,45 @@ namespace BabaIsYou
                 case 'r':
                     return Rock.create(images[c], x, y);
                 case 'f':
-                    return Flag.create(images[c], x, y);
+                    return Lava.create(images[c], x, y);
                 case 'b':
                     return Baba.create(babaTextures, x, y, you);
-                //case 'l':
-                //    return Floor.create();
-                //case 'g':
-                //    return Grass.create();
-                //case 'a':
-                //    return Water.create();
-                //case 'v':
-                //    return Lava.create();
+                case 'l':
+                    return Floor.create(images[c], x, y);
+                case 'g':
+                    return Grass.create(images[c], x, y);
+                case 'a':
+                    return Water.create(images[c], x, y);
+                case 'v':
+                    return Lava.create(images[c], x, y);
                 case 'h':
                     return Hedge.create(images[c], x, y);
+                case 'W':
+                    return WordWall.create(images[c], x, y);
+                case 'R':
+                    return WordRock.create(images[c], x, y);
+                case 'F':
+                    return WordFlag.create(images[c], x, y);
+                case 'B':
+                    return WordBaba.create(images[c], x, y);
+                case 'I':
+                    return WordIs.create(images[c], x, y);
+                case 'S':
+                    return WordStop.create(images[c], x, y);
+                case 'P':
+                    return WordPush.create(images[c], x, y);
+                case 'V':
+                    return WordLava.create(images[c], x, y);
+                case 'A':
+                    return WordWater.create(images[c], x, y);
+                case 'Y':
+                    return WordYou.create(images[c], x, y);
+                case 'X':
+                    return WordWin.create(images[c], x, y);
+                case 'N':
+                    return WordSink.create(images[c], x, y);
+                case 'K':
+                    return WordKill.create(images[c], x, y);
                 default:
                     return null;
             }
