@@ -14,6 +14,7 @@ namespace BabaIsYou.Entities.words
             flag.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
             flag.Add(new Position(x, y));
             flag.Add(new Collision());
+            flag.Add(new Word(Systems.Words.Flag));
 
             return flag;
         }

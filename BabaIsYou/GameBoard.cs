@@ -10,7 +10,7 @@ namespace BabaIsYou
 {
     public class GameBoard
     {
-        List<List<Entity>> gameBoard = new List<List<Entity>>();
+        public List<List<Entity>> gameBoard = new List<List<Entity>>();
         public int GRID_SIZE;
         Dictionary<char, Texture2D> images;
         Dictionary<Direction, Texture2D> babaTextures;
