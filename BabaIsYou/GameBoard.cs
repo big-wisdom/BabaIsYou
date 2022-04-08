@@ -52,7 +52,6 @@ namespace BabaIsYou
                 line = stream.ReadLine();
                 foreach (char c in line)
                 {
-                    Debug.WriteLine(c);
                 }
             }
 
@@ -69,15 +68,14 @@ namespace BabaIsYou
 
         private Entity getEntity(char c, int x, int y)
         {
-            Debug.Write("Char: " + c + " ");
             switch (c)
             {
                 case 'w':
                     return Wall.create(images[c], x, y);
-                //case 'r':
-                //    return Rock.create();
-                //case 'f':
-                //    return Flag.create();
+                case 'r':
+                    return Rock.create(images[c], x, y);
+                case 'f':
+                    return Flag.create(images[c], x, y);
                 case 'b':
                     return Baba.create(babaTextures, x, y, you);
                 //case 'l':
@@ -97,7 +95,6 @@ namespace BabaIsYou
 
         public void addEntity(Entity entity)
         {
-            Debug.WriteLine("Adding Entity:" + entity);
             if (entity != null)
             {
                 Components.Position pos = entity.GetComponent<Components.Position>();

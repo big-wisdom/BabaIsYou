@@ -44,6 +44,8 @@ namespace BabaIsYou
             {
                 { 'h', content.Load<Texture2D>("objects/hedge") },
                 { 'w', content.Load<Texture2D>("objects/wall") },
+                { 'r', content.Load<Texture2D>("objects/rock") },
+                { 'f', content.Load<Texture2D>("objects/flag") },
             };
 
             // initialize gameBoard
