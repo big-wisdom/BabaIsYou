@@ -14,7 +14,9 @@ namespace BabaIsYou.Entities.words
             water.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
             water.Add(new Position(x, y));
             water.Add(new Collision());
+            water.Add(new Movable());
             water.Add(new Word(Systems.Words.Water));
+            water.Add(new PushC());
 
 
             return water;

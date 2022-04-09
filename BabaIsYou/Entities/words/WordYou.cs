@@ -14,7 +14,9 @@ namespace BabaIsYou.Entities.words
             you.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
             you.Add(new Position(x, y));
             you.Add(new Collision());
+            you.Add(new Movable());
             you.Add(new Word(Systems.Words.You));
+            you.Add(new PushC());
 
             return you;
         }

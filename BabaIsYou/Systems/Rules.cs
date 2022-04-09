@@ -126,7 +126,8 @@ namespace Systems
         private void cleanEntity(Entity e)
         {
             e.Remove<StopC>();
-            e.Remove<PushC>();
+            if (!e.ContainsComponent<Word>())
+                e.Remove<PushC>();
             if (!e.ContainsComponent<WaterC>())
                 e.Remove<SinkC>();
             if (!e.ContainsComponent<LavaC>())

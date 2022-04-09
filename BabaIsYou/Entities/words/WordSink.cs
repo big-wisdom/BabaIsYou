@@ -14,7 +14,9 @@ namespace BabaIsYou.Entities.words
             sink.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
             sink.Add(new Position(x, y));
             sink.Add(new Collision());
+            sink.Add(new Movable());
             sink.Add(new Word(Systems.Words.Sink));
+            sink.Add(new PushC());
 
             return sink;
         }
