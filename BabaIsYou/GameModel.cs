@@ -1,9 +1,8 @@
-﻿using Entities;
+﻿using System.Collections.Generic;
+using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-using System.Collections.Generic;
 
 namespace BabaIsYou
 {
@@ -13,7 +12,12 @@ namespace BabaIsYou
         private readonly int WINDOW_WIDTH;
         private readonly int WINDOW_HEIGHT;
         GameBoard gameBoard;
+        Components.ComponentContext components;
         KeyboardModel keyboard;
+
+        private List<Entity> m_removeThese = new List<Entity>();
+        private List<Entity> m_addThese = new List<Entity>();
+
 
         private Systems.Renderer m_sysRenderer;
         //private Systems.Collision m_sysCollision;
@@ -33,41 +37,11 @@ namespace BabaIsYou
 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch)
         {
-            // create a dictionary that links directions to textures for baba
-            var babaTextures = new Dictionary<Components.Direction, Texture2D>() {
-                { Components.Direction.Up, content.Load<Texture2D>("baba/bunnyUp") },
-                { Components.Direction.Right, content.Load<Texture2D>("baba/bunnyRight") },
-                { Components.Direction.Down, content.Load<Texture2D>("baba/bunnyDown") },
-                { Components.Direction.Left, content.Load<Texture2D>("baba/bunnyLeft") }
-            };
-
-            var images = new Dictionary<char, Texture2D>()
-            {
-                { 'h', content.Load<Texture2D>("objects/hedge") },
-                { 'w', content.Load<Texture2D>("objects/wall") },
-                { 'r', content.Load<Texture2D>("objects/rock") },
-                { 'f', content.Load<Texture2D>("objects/flag") },
-                { 'a', content.Load<Texture2D>("objects/water") },
-                { 'g', content.Load<Texture2D>("objects/grass") },
-                { 'l', content.Load<Texture2D>("objects/floor") },
-                { 'v', content.Load<Texture2D>("objects/lava") },
-                { 'B', content.Load<Texture2D>("words/word-baba") },
-                { 'F', content.Load<Texture2D>("words/word-flag") },
-                { 'I', content.Load<Texture2D>("words/word-is") },
-                { 'K', content.Load<Texture2D>("words/word-kill") },
-                { 'V', content.Load<Texture2D>("words/word-lava") },
-                { 'P', content.Load<Texture2D>("words/word-push") },
-                { 'R', content.Load<Texture2D>("words/word-rock") },
-                { 'N', content.Load<Texture2D>("words/word-sink") },
-                { 'S', content.Load<Texture2D>("words/word-stop") },
-                { 'W', content.Load<Texture2D>("words/word-wall") },
-                { 'A', content.Load<Texture2D>("words/word-water") },
-                { 'X', content.Load<Texture2D>("words/word-win") },
-                { 'Y', content.Load<Texture2D>("words/word-you") },
-            };
+            // initialize components
+            components = new Components.ComponentContext(content, youComponent);
 
             // initialize gameBoard
-            gameBoard = new GameBoard(GRID_SIZE, images, babaTextures, youComponent);
+            gameBoard = new GameBoard(GRID_SIZE, components);
 
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, gameBoard);
@@ -80,7 +54,7 @@ namespace BabaIsYou
             //});
             m_sysMovement = new Systems.Movement(gameBoard, keyboard);
             m_sysKeyboardInput = new Systems.KeyboardInput(keyboard);
-            m_sysRules = new Systems.Rules(gameBoard);
+            m_sysRules = new Systems.Rules(gameBoard, components, RemoveEntity, AddEntity);
 
             initializeEntities();
         }
@@ -102,7 +76,7 @@ namespace BabaIsYou
             //{
             //    AddEntity(entity);
             //}
-            //m_addThese.Clear();
+            m_addThese.Clear();
         }
 
         public void Draw(GameTime gameTime)

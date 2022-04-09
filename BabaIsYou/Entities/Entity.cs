@@ -125,13 +125,25 @@ namespace Entities
 
         /// <summary>
         /// Returns the component in this entity that is of the given type,
-        /// or throws a <see cref="ComponentNotFoundException"/> if no such component is found in this entity.
+        /// or null if no such component is found in this entity.
         /// </summary>        
         public TComponent GetComponent<TComponent>()
             where TComponent : Component
         {
             if (components.ContainsKey(typeof(TComponent)))
                 return (TComponent)this.components[typeof(TComponent)];
+            else
+                return null;
+        }
+
+        /// <summary>
+        /// Returns the component in this entity that is of the given type,
+        /// or throws a <see cref="ComponentNotFoundException"/> if no such component is found in this entity.
+        /// </summary>        
+        public Component GetComponent(Type componentType)
+        {
+            if (components.ContainsKey(componentType))
+                return this.components[componentType];
             else
                 return null;
         }

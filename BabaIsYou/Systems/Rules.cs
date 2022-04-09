@@ -3,7 +3,7 @@ using Microsoft.Xna.Framework;
 using Components;
 using Entities;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System;
 
 namespace Systems
 {
@@ -21,15 +21,24 @@ namespace Systems
         You,
         Win,
         Sink,
-        Kill
+        Kill,
+        Hedge, // isn't actually ever a word but this is useful for organising data 
+        Floor, // same here
+        Grass, // same here
     }
 
     class Rules : System
     {
         GameBoard gameBoard;
-        public Rules(GameBoard gameBoard)
+        ComponentContext components;
+        Action<Entity> AddEntity;
+        Action<Entity> RemoveEntity;
+        public Rules(GameBoard gameBoard, ComponentContext components, Action<Entity>RemoveEntity, Action<Entity>AddEntity)
         {
             this.gameBoard = gameBoard;
+            this.components = components;
+            this.AddEntity = AddEntity;
+            this.RemoveEntity = RemoveEntity;
         }
 
         public override void Update(GameTime gameTime)
@@ -40,9 +49,9 @@ namespace Systems
             int cols = gameBoard.gameBoard[0].Count;
             List<List<Words>> sentences = new List<List<Words>>();
 
-            for (int y=0; y<rows; y++)
+            for (int y = 0; y < rows; y++)
             {
-                for (int x=0; x<cols; x++)
+                for (int x = 0; x < cols; x++)
                 {
                     Entity e = gameBoard.gameBoard[y][x];
                     if (e != null)
@@ -53,7 +62,7 @@ namespace Systems
                             sentences.AddRange(getSentencesStartingWith(e));
                         }
                     }
-                    
+
                 }
             }
 
@@ -69,14 +78,94 @@ namespace Systems
             foreach (List<Words> sentence in removeSentences) sentences.Remove(sentence);
 
             // apply components
-            foreach (List<Words> sentence in sentences)
-            { 
-                // apply components
-                foreach (Words word in sentence)
+            applyRules(sentences);
+        }
+
+        private void applyRules(List<List<Words>> rules)
+        {
+            List<Entity> updateList = gameBoard.getEntities();
+            for (int i = 0; i < updateList.Count; i++)
+            {
+                // TODO: Here I will need to remove any components that need to be set by rules so that the rule system can apply them
+                Entity e = updateList[i];
+                foreach (List<Words> rule in rules)
                 {
-                    Debug.Write(word + " ");
+                    // if entity has component of first of rule
+                    if (updateList[i].ContainsComponent(getType(rule[0])))
+                    {
+                        // if third is object
+                        if (isObject(rule[2]))
+                        {
+                            // change type of entity
+                            Component oldComponent = e.GetComponent(getType(rule[0]));
+                            e.Remove(oldComponent); // remove the old object type
+                            e.Remove<Appearance>(); // remove appearance
+
+                            // change appearance
+                            // from type, I'm going to need to generate a new appearance component
+                            Appearance newAppearance = components.appearances[rule[2]];
+
+                            // add to end of update list to go get all rules that apply to it
+                            updateList.Add(e);
+                        }
+
+                        // here I contruct a new object of type getType(rules[2])
+                        // this will also probably be more complicated when turning into baba
+                        if (!e.ContainsComponent(getType(rule[2])))
+                        { 
+                            e.Add(getInstanceOfType(getType(rule[2]))); // do I need to make this a more specific type?
+                        }
+                    }
                 }
-                Debug.Write("\n");
+                // re-add entity to systems to update which systems care about this entity
+                RemoveEntity(e);
+                AddEntity(e);
+            }
+        }
+
+        private Component getInstanceOfType(Type t)
+        {
+            if (t == typeof(Components.You))
+            {
+                return components.you;
+            } else if (t == typeof(Components.BabaComponent))
+            {
+                Entity babaEntity = components.getEntity('b', 0, 0);
+                return babaEntity.GetComponent<BabaComponent>();
+            }
+            return (Component)Activator.CreateInstance(t);
+        }
+
+        private Type getType(Words word)
+        {
+            switch (word)
+            {
+                case Words.Wall:
+                    return typeof(Components.WallC);
+                case Words.Rock:
+                    return typeof(Components.RockC);
+                case Words.Flag:
+                    return typeof(Components.FlagC);
+                case Words.Lava:
+                    return typeof(Components.LavaC);
+                case Words.Baba:
+                    return typeof(Components.BabaComponent);
+                case Words.Water:
+                    return typeof(Components.WaterC);
+                case Words.You:
+                    return typeof(Components.You);
+                case Words.Push:
+                    return typeof(Components.PushC);
+                case Words.Kill:
+                    return typeof(Components.KillC);
+                case Words.Win:
+                    return typeof(Components.WinC);
+                case Words.Sink:
+                    return typeof(Components.SinkC);
+                case Words.Stop:
+                    return typeof(Components.StopC);
+                default:
+                    throw new Exception("Word: " + word + " does not belong here");
             }
         }
 
@@ -121,7 +210,8 @@ namespace Systems
         }
 
         private bool validSentence(List<Words> sentence)
-        {;
+        {
+            ;
             // first should be object
             if (!isObject(sentence[0])) return false;
 
@@ -136,8 +226,8 @@ namespace Systems
         }
 
         private bool isObject(Words word)
-        { 
-            switch(word)
+        {
+            switch (word)
             {
                 case Words.Wall:
                 case Words.Baba:
@@ -151,8 +241,8 @@ namespace Systems
         }
 
         private bool isQuality(Words word)
-        { 
-            switch(word)
+        {
+            switch (word)
             {
                 case Words.Kill:
                 case Words.Push:

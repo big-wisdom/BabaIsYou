@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
 
 namespace Entities
 {
@@ -16,7 +15,6 @@ namespace Entities
             baba.Add(new Components.Position(x, y));
             baba.Add(new Components.Movable());
             baba.Add(new Components.Collision());
-            baba.Add(you);
 
             return baba;
         }
