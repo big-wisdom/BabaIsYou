@@ -88,6 +88,7 @@ namespace Systems
             {
                 // TODO: Here I will need to remove any components that need to be set by rules so that the rule system can apply them
                 Entity e = updateList[i];
+                cleanEntity(e);
                 foreach (List<Words> rule in rules)
                 {
                     // if entity has component of first of rule
@@ -121,6 +122,18 @@ namespace Systems
                 RemoveEntity(e);
                 AddEntity(e);
             }
+        }
+
+        private void cleanEntity(Entity e)
+        {
+            e.Remove<StopC>();
+            e.Remove<PushC>();
+            if (!e.ContainsComponent<WaterC>())
+                e.Remove<SinkC>();
+            if (!e.ContainsComponent<LavaC>())
+                e.Remove<KillC>();
+            e.Remove<You>();
+            e.Remove<WinC>();
         }
 
         private Component getInstanceOfType(Type t)
