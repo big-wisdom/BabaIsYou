@@ -15,6 +15,7 @@ namespace BabaIsYou.Entities.words
             stop.Add(new Position(x, y));
             stop.Add(new Collision());
             stop.Add(new Word(Systems.Words.Stop));
+            stop.Add(new PushC());
 
             return stop;
         }

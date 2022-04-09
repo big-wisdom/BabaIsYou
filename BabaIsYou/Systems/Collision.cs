@@ -1,4 +1,6 @@
-﻿using Entities;
+﻿using BabaIsYou;
+using Components;
+using Entities;
 using Microsoft.Xna.Framework;
 using System;
 using System.Collections.Generic;
@@ -7,13 +9,13 @@ namespace Systems
 {
     public class Collision : System
     {
-        private Action<Entity> m_foodConsumed;
-        public Collision(Action<Entity> foodConsumed)
+        GameBoard gameBoard;
+        public Collision(GameBoard gameBoard)
             : base(
                   typeof(Components.Position)
                   )
         {
-            this.m_foodConsumed = foodConsumed;
+            this.gameBoard = gameBoard;
         }
 
         /// <summary>
@@ -26,28 +28,97 @@ namespace Systems
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            //var movable = findMovable(m_entities);
+            // go through the gameBoard
+            // if an entity wants to move call move on it
+            for (int y=0; y<gameBoard.gameBoard.Count; y++)
+            { 
+                for (int x=0; x<gameBoard.gameBoard[0].Count; x++)
+                {
+                    Entity e = gameBoard.gameBoard[y][x];
+                    if (e != null)
+                    {
+                        Position newP;
+                        if ((newP = getTargetDestination(e)) != null)
+                        {
+                            e.GetComponent<Movable>().movementDirection = move(e, newP);
+                        }
+                    }
+                }
+            }
+        }
 
-            //foreach (var entity in m_entities.Values)
-            //{
-            //    foreach (var entityMovable in movable)
-            //    {
-            //        if (collides(entity, entityMovable))
-            //        {
-            //            //
-            //            // If food, that's okay
-            //            if (entity.ContainsComponent<Components.Food>())
-            //            {
-            //                entityMovable.GetComponent<Components.Movable>().segmentsToAdd = 3;
-            //                m_foodConsumed(entity);
-            //            }
-            //            else
-            //            {
-            //                entityMovable.GetComponent<Components.Movable>().facing = Components.Direction.Stopped;
-            //            }
-            //        }
-            //    }
-            //}
+        private Direction move(Entity e, Position target)
+        {
+            // get what's at target
+            Entity targetEntity = gameBoard.gameBoard[target.y][target.x];
+            // if not empty
+            if (targetEntity != null)
+            {
+                // push
+                if (targetEntity.ContainsComponent<PushC>())
+                {
+                    // if something is push, it should be movable
+                    targetEntity.GetComponent<Movable>().movementDirection = e.GetComponent<Movable>().movementDirection;
+                    return move(targetEntity, getTargetDestination(targetEntity));
+                }
+
+                // stop
+                if (targetEntity.ContainsComponent<StopC>())
+                    return Direction.Stopped;
+
+                // kill
+                if (targetEntity.ContainsComponent<KillC>())
+                    throw new NotImplementedException();
+
+                // sink
+                if (targetEntity.ContainsComponent<SinkC>())
+                    throw new NotImplementedException();
+
+                // win
+                if (targetEntity.ContainsComponent<KillC>())
+                    throw new NotImplementedException();
+            }
+
+            // just leave movementDirection how it is
+            return e.GetComponent<Movable>().movementDirection;
+        }
+
+        private Position getTargetDestination(Entity e)
+        {
+            // if moveable
+            Movable m;
+            if ((m = e.GetComponent<Movable>()) != null)
+            { 
+                // if it wants to move
+                if (m.movementDirection != Direction.Stopped)
+                {
+                    // get current position
+                    Position p = e.GetComponent<Position>(); // there shouldn't ever be one with is movable without position
+                    // increment off of desired
+                    int newX = p.x;
+                    int newY = p.y;
+                    switch (m.movementDirection)
+                    {
+                        case Direction.Up:
+                            newY--;
+                            break;
+                        case Direction.Down:
+                            newY++;
+                            break;
+                        case Direction.Left:
+                            newX--;
+                            break;
+                        case Direction.Right:
+                            newX++;
+                            break;
+                    }
+
+                    // return new position
+                    return new Position(newX, newY);
+                }
+            }
+            // return null
+            return null;
         }
 
         /// <summary>

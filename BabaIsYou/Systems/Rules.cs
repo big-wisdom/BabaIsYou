@@ -86,9 +86,8 @@ namespace Systems
             List<Entity> updateList = gameBoard.getEntities();
             for (int i = 0; i < updateList.Count; i++)
             {
-                // TODO: Here I will need to remove any components that need to be set by rules so that the rule system can apply them
                 Entity e = updateList[i];
-                cleanEntity(e);
+                cleanEntity(e); // remove all components that should only be set by rules
                 foreach (List<Words> rule in rules)
                 {
                     // if entity has component of first of rule

@@ -20,7 +20,7 @@ namespace BabaIsYou
 
 
         private Systems.Renderer m_sysRenderer;
-        //private Systems.Collision m_sysCollision;
+        private Systems.Collision m_sysCollision;
         private Systems.Movement m_sysMovement;
         private Systems.KeyboardInput m_sysKeyboardInput;
         private Systems.Rules m_sysRules;
@@ -45,13 +45,7 @@ namespace BabaIsYou
 
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, gameBoard);
-            //m_sysCollision = new Systems.Collision((entity) =>
-            //{
-            //    // Remove the existing food pill
-            //    m_removeThese.Add(entity);
-            //    // Need another food pill
-            //    m_addThese.Add(createFood(texSquare));
-            //});
+            m_sysCollision = new Systems.Collision(gameBoard);
             m_sysMovement = new Systems.Movement(gameBoard, keyboard);
             m_sysKeyboardInput = new Systems.KeyboardInput(keyboard);
             m_sysRules = new Systems.Rules(gameBoard, components, RemoveEntity, AddEntity);
@@ -62,8 +56,8 @@ namespace BabaIsYou
         public void Update(GameTime gameTime)
         {
             m_sysKeyboardInput.Update(gameTime);
+            m_sysCollision.Update(gameTime);
             m_sysMovement.Update(gameTime);
-            //m_sysCollision.Update(gameTime);
             m_sysRules.Update(gameTime);
 
             //foreach (var entity in m_removeThese)
