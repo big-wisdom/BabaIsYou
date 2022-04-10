@@ -29,7 +29,7 @@ namespace BabaIsYou
 
         private void initializeBoard()
         {
-            System.IO.StreamReader stream = new System.IO.StreamReader("../../../levelFiles/level-1.bbiy");
+            System.IO.StreamReader stream = new System.IO.StreamReader("../../../levelFiles/level-2.bbiy");
             string line;
 
             line = stream.ReadLine(); // this reads the title line

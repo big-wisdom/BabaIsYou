@@ -96,6 +96,9 @@ namespace Systems
                         // if third is object
                         if (isObject(rule[2]))
                         {
+                            // get this entities position
+                            // remove it
+                            // add in one of type rule[2]
                             // change type of entity
                             Component oldComponent = e.GetComponent(getType(rule[0]));
                             e.Remove(oldComponent); // remove the old object type
@@ -148,7 +151,7 @@ namespace Systems
                 return components.you;
             } else if (t == typeof(Components.BabaComponent))
             {
-                Entity babaEntity = components.getEntity('b', 0, 0);
+                Entity babaEntity = components.getObjectEntity(Words.Baba, 0, 0);
                 return babaEntity.GetComponent<BabaComponent>();
             }
             return (Component)Activator.CreateInstance(t);
