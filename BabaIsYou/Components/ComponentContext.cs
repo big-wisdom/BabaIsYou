@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using BabaIsYou.Entities;
 using BabaIsYou.Entities.words;
 using Entities;
@@ -98,67 +99,77 @@ namespace Components
             if (letterToWord.ContainsKey(c))
             {
                 Words word = letterToWord[c];
-                switch (word)
-                {
-                    case Words.Wall:
-                        return Wall.create(images[word], x, y);
-                    case Words.Rock:
-                        return Rock.create(images[word], x, y);
-                    case Words.Lava:
-                        return Lava.create(images[word], x, y);
-                    case Words.Baba:
-                        return Baba.create(babaTextures, x, y, you);
-                    case Words.Floor:
-                        return Floor.create(images[word], x, y);
-                    case Words.Grass:
-                        return Grass.create(images[word], x, y);
-                    case Words.Water:
-                        return Water.create(images[word], x, y);
-                    case Words.Hedge:
-                        return Hedge.create(images[word], x, y);
-                    case Words.Flag:
-                        return Flag.create(images[word], x, y);
-                    default:
-                        return null;
-                }
+                return getObjectEntity(word, x, y);
             }
             else if (letterToWordWord.ContainsKey(c))
             {
                 Words word = letterToWordWord[c];
-                switch (word)
-                {
-                    case Words.Wall:
-                        return WordWall.create(wordImages[word], x, y);
-                    case Words.Rock:
-                        return WordRock.create(wordImages[word], x, y);
-                    case Words.Flag:
-                        return WordFlag.create(wordImages[word], x, y);
-                    case Words.Baba:
-                        return WordBaba.create(wordImages[word], x, y);
-                    case Words.Is:
-                        return WordIs.create(wordImages[word], x, y);
-                    case Words.Stop:
-                        return WordStop.create(wordImages[word], x, y);
-                    case Words.Push:
-                        return WordPush.create(wordImages[word], x, y);
-                    case Words.Lava:
-                        return WordLava.create(wordImages[word], x, y);
-                    case Words.Water:
-                        return WordWater.create(wordImages[word], x, y);
-                    case Words.You:
-                        return WordYou.create(wordImages[word], x, y);
-                    case Words.Win:
-                        return WordWin.create(wordImages[word], x, y);
-                    case Words.Sink:
-                        return WordSink.create(wordImages[word], x, y);
-                    case Words.Kill:
-                        return WordKill.create(wordImages[word], x, y);
-                    default:
-                        return null;
-                }
+                return getWordEntity(word, x, y);
             }
             else
                 return null;
+        }
+
+        public Entity getObjectEntity(Words word, int x, int y)
+        {
+            switch (word)
+            {
+                case Words.Wall:
+                    return Wall.create(images[word], x, y);
+                case Words.Rock:
+                    return Rock.create(images[word], x, y);
+                case Words.Lava:
+                    return Lava.create(images[word], x, y);
+                case Words.Baba:
+                    return Baba.create(babaTextures, x, y, you);
+                case Words.Floor:
+                    return Floor.create(images[word], x, y);
+                case Words.Grass:
+                    return Grass.create(images[word], x, y);
+                case Words.Water:
+                    return Water.create(images[word], x, y);
+                case Words.Hedge:
+                    return Hedge.create(images[word], x, y);
+                case Words.Flag:
+                    return Flag.create(images[word], x, y);
+                default:
+                    return null;
+            }
+        }
+
+        public Entity getWordEntity(Words word, int x, int y)
+        {
+            switch (word)
+            {
+                case Words.Wall:
+                    return WordWall.create(wordImages[word], x, y);
+                case Words.Rock:
+                    return WordRock.create(wordImages[word], x, y);
+                case Words.Flag:
+                    return WordFlag.create(wordImages[word], x, y);
+                case Words.Baba:
+                    return WordBaba.create(wordImages[word], x, y);
+                case Words.Is:
+                    return WordIs.create(wordImages[word], x, y);
+                case Words.Stop:
+                    return WordStop.create(wordImages[word], x, y);
+                case Words.Push:
+                    return WordPush.create(wordImages[word], x, y);
+                case Words.Lava:
+                    return WordLava.create(wordImages[word], x, y);
+                case Words.Water:
+                    return WordWater.create(wordImages[word], x, y);
+                case Words.You:
+                    return WordYou.create(wordImages[word], x, y);
+                case Words.Win:
+                    return WordWin.create(wordImages[word], x, y);
+                case Words.Sink:
+                    return WordSink.create(wordImages[word], x, y);
+                case Words.Kill:
+                    return WordKill.create(wordImages[word], x, y);
+                default:
+                    return null;
+            }
         }
     }
 }

@@ -14,6 +14,7 @@ namespace BabaIsYou.Entities
             hedge.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
             hedge.Add(new Position(x, y));
             hedge.Add(new Collision());
+            hedge.Add(new StopC());
 
             return hedge;
         }
