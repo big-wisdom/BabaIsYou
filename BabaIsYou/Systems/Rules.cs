@@ -53,9 +53,9 @@ namespace Systems
             {
                 for (int x = 0; x < cols; x++)
                 {
-                    Entity e = gameBoard.gameBoard[y][x];
-                    if (e != null)
+                    if (gameBoard.gameBoard[y][x].Count > 0)
                     {
+                        Entity e = gameBoard.gameBoard[y][x].Last.Value; // TODO: Will I ever need to update more than the top one?
                         Word word = e.GetComponent<Word>();
                         if (word != null)
                         {
@@ -112,8 +112,13 @@ namespace Systems
                         // here I contruct a new object of type getType(rules[2])
                         // this will also probably be more complicated when turning into baba
                         if (!e.ContainsComponent(getType(rule[2])))
-                        { 
-                            e.Add(getInstanceOfType(getType(rule[2]))); // do I need to make this a more specific type?
+                        {
+                            Component newComp = getInstanceOfType(getType(rule[2]));
+                            e.Add(newComp); // do I need to make this a more specific type?
+                            if (newComp.GetType() == typeof(Components.PushC) && !e.ContainsComponent<Movable>())
+                            {
+                                e.Add(new Movable());
+                            }
                         }
                     }
                 }
@@ -212,12 +217,11 @@ namespace Systems
                 int nextY = p.y + dy;
                 if (nextY < gameBoard.gameBoard.Count && nextX < gameBoard.gameBoard[0].Count)
                 {
-                    Entity nextEntity = gameBoard.gameBoard[nextY][nextX];
-                    if (nextEntity != null)
+                    if (gameBoard.gameBoard[nextY][nextX].Count > 0)
                     {
+                        Entity nextEntity = gameBoard.gameBoard[nextY][nextX].Last.Value;
                         getSentences(nextEntity, soFar, dx, dy);
                     }
-
                 }
             }
         }

@@ -102,9 +102,13 @@ namespace BabaIsYou
 
         private void initializeEntities()
         {
-            foreach (Entity e in gameBoard.getEntities())
+            foreach (Entity entity in gameBoard.getEntities())
             {
-                AddEntity(e);
+                m_sysKeyboardInput.Add(entity);
+                m_sysMovement.Add(entity);
+                //m_sysCollision.Add(entity);
+                m_sysRenderer.Add(entity);
+                m_sysRules.Add(entity); // I don't really need to add this as it just goes off of the game board but here we are
             }
         }
     }

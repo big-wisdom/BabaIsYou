@@ -7,7 +7,7 @@ namespace BabaIsYou
 {
     public class GameBoard
     {
-        public List<List<Entity>> gameBoard = new List<List<Entity>>();
+        public List<List<LinkedList<Entity>>> gameBoard = new List<List<LinkedList<Entity>>>();
         public int GRID_SIZE;
         ComponentContext components;
 
@@ -17,9 +17,10 @@ namespace BabaIsYou
             this.components = components;
 
             for (int y=0; y<GRID_SIZE; y++) {
-                gameBoard.Add(new List<Entity>());
+                gameBoard.Add(new List<LinkedList<Entity>>());
                 for (int x=0; x<GRID_SIZE; x++) {
-                    gameBoard[y].Add(null);
+                    var ll = new LinkedList<Entity>();
+                    gameBoard[y].Add(ll);
                 }
             }
 
@@ -63,26 +64,29 @@ namespace BabaIsYou
             if (entity != null)
             {
                 Components.Position pos = entity.GetComponent<Components.Position>();
-                gameBoard[pos.y][pos.x] = entity;
+                gameBoard[pos.y][pos.x].AddLast(entity);
             }
         }
 
         public void removeEntity(Entity entity)
         { 
             Components.Position pos =  entity.GetComponent<Components.Position>();
-            gameBoard[pos.y][pos.x] = null;
+            gameBoard[pos.y][pos.x].Remove(entity); // TODO: What is it's not on top of the stack?
         }
 
         public List<Entity> getEntities()
         {
             List<Entity> entities = new List<Entity>();
-            foreach (List<Entity> row in gameBoard)
+            foreach (List<LinkedList<Entity>> row in gameBoard)
             {
-                foreach (Entity e in row)
-                {
-                    if (e != null)
-                    {
-                        entities.Add(e);
+                foreach (LinkedList<Entity> stack in row)
+                { 
+                    foreach (Entity e in stack)
+                    { 
+                        if (e != null)
+                        {
+                            entities.Add(e);
+                        }
                     }
                 }
             }

@@ -34,9 +34,9 @@ namespace Systems
             { 
                 for (int x=0; x<gameBoard.gameBoard[0].Count; x++)
                 {
-                    Entity e = gameBoard.gameBoard[y][x];
-                    if (e != null)
+                    if (gameBoard.gameBoard[y][x].Count > 0)
                     {
+                        Entity e = gameBoard.gameBoard[y][x].Last.Value; // TODO: this will only update the top item of each stack
                         Position newP;
                         if ((newP = getTargetDestination(e)) != null)
                         {
@@ -50,10 +50,10 @@ namespace Systems
         private Direction move(Entity e, Position target)
         {
             // get what's at target
-            Entity targetEntity = gameBoard.gameBoard[target.y][target.x];
             // if not empty
-            if (targetEntity != null)
+            if (gameBoard.gameBoard[target.y][target.x].Count > 0)
             {
+                Entity targetEntity = gameBoard.gameBoard[target.y][target.x].Last.Value; // only check the thing on top
                 // push
                 if (targetEntity.ContainsComponent<PushC>())
                 {

@@ -10,7 +10,7 @@ namespace Systems
 
     class Renderer : System
     {
-        private readonly List<List<Entities.Entity>> gameBoard;
+        private readonly GameBoard gameBoard;
         private readonly int CELL_SIZE;
         private readonly SpriteBatch m_spriteBatch;
 
@@ -19,16 +19,28 @@ namespace Systems
         {
             CELL_SIZE = height / gameBoard.GRID_SIZE;
             m_spriteBatch = spriteBatch;
+            this.gameBoard = gameBoard;
         }
 
         public override void Update(GameTime gameTime)
         {
             m_spriteBatch.Begin();
 
-            foreach (var entity in m_entities.Values)
-            {
-                renderEntity(entity);
+            foreach (List<LinkedList<Entity>> row in gameBoard.gameBoard)
+            { 
+                foreach (LinkedList<Entity> cell in row)
+                { 
+                    foreach (Entity e in cell)
+                    {
+                        if (e != null)
+                            renderEntity(e);
+                    }
+                }
             }
+            //foreach (var entity in m_entities.Values)
+            //{
+            //    renderEntity(entity);
+            //}
 
             m_spriteBatch.End();
         }
