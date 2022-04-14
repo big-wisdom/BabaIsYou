@@ -94,6 +94,14 @@ namespace Systems
                 cleanEntity(e); // remove all components that should only be set by rules
                 foreach (List<Words> rule in rules)
                 {
+                    // if entity has component of first rule
+                        // if third is object
+                            // get position from this entity
+                            // replace this entity with a new entity at that position
+                        // else
+                            // add in whatever component it needs
+
+
                     // if entity has component of first of rule
                     if (updateList[i].ContainsComponent(getType(rule[0])))
                     {
