@@ -13,6 +13,7 @@ namespace BabaIsYou.Entities
 
             wall.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
             wall.Add(new Position(x, y));
+            wall.Add(new Movable());
             wall.Add(new Collision());
             wall.Add(new WallC());
 

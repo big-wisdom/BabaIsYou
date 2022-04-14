@@ -4,6 +4,7 @@ using Components;
 using Entities;
 using System.Collections.Generic;
 using System;
+using System.Diagnostics;
 
 namespace Systems
 {
@@ -87,6 +88,9 @@ namespace Systems
             for (int i = 0; i < updateList.Count; i++)
             {
                 Entity e = updateList[i];
+                if (e.ContainsComponent<WallC>())
+                { 
+                }
                 cleanEntity(e); // remove all components that should only be set by rules
                 foreach (List<Words> rule in rules)
                 {

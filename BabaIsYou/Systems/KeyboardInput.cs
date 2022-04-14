@@ -1,6 +1,5 @@
 ﻿using BabaIsYou;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using System;
 
 namespace Systems
@@ -22,14 +21,14 @@ namespace Systems
 
         public override void Update(GameTime gameTime)
         {
-            foreach (var entity in m_entities.Values)
+            foreach (var key in keyboard.GetUnlockedKeys())
             {
-                var movable = entity.GetComponent<Components.Movable>();
-                var input = entity.GetComponent<Components.You>();
-                var baba = entity.GetComponent<Components.BabaComponent>();
-
-                foreach (var key in keyboard.GetUnlockedKeys())
+                foreach (var entity in m_entities.Values)
                 {
+                    var movable = entity.GetComponent<Components.Movable>();
+                    var input = entity.GetComponent<Components.You>();
+                    var baba = entity.GetComponent<Components.BabaComponent>();
+
                     Nullable<Components.Direction> control = input.controls.getControl(key);
                     if (control != null)
                     {
