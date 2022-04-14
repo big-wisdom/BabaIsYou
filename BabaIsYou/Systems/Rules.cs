@@ -88,7 +88,7 @@ namespace Systems
             for (int i = 0; i < updateList.Count; i++)
             {
                 Entity e = updateList[i];
-                if (e.ContainsComponent<WallC>())
+                if (e.ContainsComponent<FlagC>())
                 { 
                 }
                 cleanEntity(e); // remove all components that should only be set by rules
