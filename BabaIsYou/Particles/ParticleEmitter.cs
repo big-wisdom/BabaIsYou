@@ -8,6 +8,8 @@ namespace BabaIsYou.Particles
 {
     public class ParticleEmitter
     {
+        private TimeSpan emitterLifetime = TimeSpan.FromSeconds(4);
+        public bool done = false;
 
         private Dictionary<int, Particle> m_particles = new Dictionary<int, Particle>();
         private Texture2D m_texFire;
@@ -45,10 +47,16 @@ namespace BabaIsYou.Particles
         /// </summary>
         public void update(GameTime gameTime)
         {
+            emitterLifetime -= gameTime.ElapsedGameTime;
+            if (emitterLifetime < (TimeSpan.Zero - m_lifetime)) // also wait for the last particles to fizzle
+            {
+                done = true;
+            }
+
             //
             // Generate particles at the specified rate
             m_accumulated += gameTime.ElapsedGameTime;
-            while (m_accumulated > m_rate)
+            while (m_accumulated > m_rate && emitterLifetime > TimeSpan.Zero)
             {
                 m_accumulated -= m_rate;
 

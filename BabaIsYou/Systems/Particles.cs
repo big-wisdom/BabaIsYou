@@ -41,6 +41,8 @@ namespace Systems
             {
                 p.update(gameTime);
             }
+
+            gameBoard.particleEmmiters.RemoveAll((emitter) => emitter.done);
         }
     }
 }
