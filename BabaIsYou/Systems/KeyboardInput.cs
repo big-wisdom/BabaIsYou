@@ -13,6 +13,7 @@ namespace Systems
     {
         KeyboardModel keyboard;
         TimeSpan keyHoldInterval = TimeSpan.FromMilliseconds(200);
+        bool keyLocked = false;
 
         public KeyboardInput(KeyboardModel keyboard)
             : base(typeof(Components.You))
@@ -22,6 +23,7 @@ namespace Systems
 
         public override void Update(GameTime gameTime)
         {
+            keyLocked = false;
             foreach (var key in keyboard.GetUnlockedKeys())
             {
                 foreach (var entity in m_entities.Values)
@@ -35,7 +37,11 @@ namespace Systems
                     {
                         movable.movementDirection  = control.Value;
                         if (baba != null) baba.direction = control.Value;
-                        keyboard.lockKey(key, keyHoldInterval);
+                        if (!keyLocked)
+                        { 
+                            keyboard.lockKey(key);
+                            keyLocked = true;
+                        }
                     }
                 }
             }
