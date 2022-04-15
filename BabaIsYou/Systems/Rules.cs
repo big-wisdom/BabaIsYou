@@ -231,19 +231,21 @@ namespace Systems
             List<List<Words>> sentences = new List<List<Words>>();
             // check to the right
             List<Words> right = new List<Words>();
-            getSentences(e, right, 1, 0);
+            getSentences(e, right, 1, 0, 3);
             sentences.Add(right);
 
             // check down
             List<Words> down = new List<Words>();
-            getSentences(e, down, 0, 1);
+            getSentences(e, down, 0, 1, 3);
             sentences.Add(down);
 
             return sentences;
         }
 
-        private void getSentences(Entity e, List<Words> soFar, int dx, int dy)
+        private void getSentences(Entity e, List<Words> soFar, int dx, int dy, int moves)
         {
+            if (moves == 0) return;
+
             // if this entity is a word, add it to the list and move to the next cell
             Word word = e.GetComponent<Word>();
             if (word != null)
@@ -259,7 +261,7 @@ namespace Systems
                     if (gameBoard.gameBoard[nextY][nextX].Count > 0)
                     {
                         Entity nextEntity = gameBoard.gameBoard[nextY][nextX].Last.Value;
-                        getSentences(nextEntity, soFar, dx, dy);
+                        getSentences(nextEntity, soFar, dx, dy, moves-1);
                     }
                 }
             }
