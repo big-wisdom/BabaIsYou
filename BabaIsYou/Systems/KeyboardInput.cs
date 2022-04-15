@@ -12,6 +12,7 @@ namespace Systems
     class KeyboardInput : System
     {
         KeyboardModel keyboard;
+        TimeSpan keyHoldInterval = TimeSpan.FromMilliseconds(200);
 
         public KeyboardInput(KeyboardModel keyboard)
             : base(typeof(Components.You))
@@ -34,7 +35,7 @@ namespace Systems
                     {
                         movable.movementDirection  = control.Value;
                         if (baba != null) baba.direction = control.Value;
-                        keyboard.lockKey(key);
+                        keyboard.lockKey(key, keyHoldInterval);
                     }
                 }
             }

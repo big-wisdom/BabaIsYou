@@ -11,7 +11,7 @@ namespace BabaIsYou.Entities.words
         {
             var win = new Entity();
 
-            win.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
+            win.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.YellowGreen));
             win.Add(new Position(x, y));
             win.Add(new Collision());
             win.Add(new Movable());

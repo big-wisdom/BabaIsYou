@@ -6,7 +6,7 @@ namespace BabaIsYou
 {
     public class KeyboardModel
     {
-        HashSet<Keys> locked = new HashSet<Keys>();
+        Dictionary<Keys, TimeSpan> locked = new Dictionary<Keys, TimeSpan>();
 
         public List<Keys> GetUnlockedKeys() {
             KeyboardState keyboard = Keyboard.GetState();
@@ -14,7 +14,7 @@ namespace BabaIsYou
 
             // remove all locked keys
             List<Keys> unlockList = new List<Keys>();
-            foreach (Keys k in locked) {
+            foreach (Keys k in locked.Keys) {
                 if (!unlockedKeys.Remove(k)) {
                     unlockList.Add(k); // if key no longer pressed then unlock it
                 }
@@ -24,8 +24,26 @@ namespace BabaIsYou
             return unlockedKeys;
         }
 
+        public void update(TimeSpan elapsedTime)
+        {
+            List<Keys> removeKeys = new List<Keys>();
+            List<Keys> keys = new List<Keys>(locked.Keys);
+            foreach (Keys key in keys)
+            {
+                if (locked[key] != TimeSpan.MaxValue)
+                    locked[key] -= elapsedTime;
+
+                if (locked[key] < TimeSpan.Zero)
+                    locked.Remove(key);
+            }
+        }
+
         public void lockKey(Keys key) {
-            locked.Add(key);
+            locked.Add(key, TimeSpan.MaxValue);
+        }
+
+        public void lockKey(Keys key, TimeSpan duration) {
+            locked.Add(key, duration);
         }
 
         public void unlockKey(Keys key) {

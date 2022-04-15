@@ -11,7 +11,7 @@ namespace BabaIsYou.Entities
         {
             var flag = new Entity();
 
-            flag.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
+            flag.Add(new Appearance(image, computeSourceRectangle, 3, Color.Yellow, Color.Yellow));
             flag.Add(new Position(x, y));
             flag.Add(new Movable());
             flag.Add(new Collision());

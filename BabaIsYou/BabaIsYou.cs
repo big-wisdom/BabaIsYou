@@ -56,6 +56,7 @@ namespace CS5410
         protected override void Update(GameTime gameTime)
         {
             m_nextStateEnum = m_currentState.processInput(gameTime);
+            keyboard.update(gameTime.ElapsedGameTime);
             // Special case for exiting the game
             if (m_nextStateEnum == GameStateEnum.Exit)
             {

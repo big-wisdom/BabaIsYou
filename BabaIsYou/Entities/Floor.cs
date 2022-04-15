@@ -11,7 +11,7 @@ namespace BabaIsYou.Entities
         {
             var floor = new Entity();
 
-            floor.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
+            floor.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.Gray));
             floor.Add(new Position(x, y));
             floor.Add(new Collision());
 

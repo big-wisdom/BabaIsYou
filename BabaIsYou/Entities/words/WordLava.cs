@@ -11,7 +11,7 @@ namespace BabaIsYou.Entities.words
         {
             var lava = new Entity();
 
-            lava.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
+            lava.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.DeepPink));
             lava.Add(new Position(x, y));
             lava.Add(new Collision());
             lava.Add(new Movable());

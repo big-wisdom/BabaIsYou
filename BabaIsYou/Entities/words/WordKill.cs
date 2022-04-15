@@ -11,7 +11,7 @@ namespace BabaIsYou.Entities.words
         {
             var kill = new Entity();
 
-            kill.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
+            kill.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.YellowGreen));
             kill.Add(new Position(x, y));
             kill.Add(new Collision());
             kill.Add(new Movable());

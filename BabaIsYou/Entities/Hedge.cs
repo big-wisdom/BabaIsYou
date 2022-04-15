@@ -11,7 +11,7 @@ namespace BabaIsYou.Entities
         {
             var hedge = new Entity();
 
-            hedge.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
+            hedge.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.DarkGreen));
             hedge.Add(new Position(x, y));
             hedge.Add(new Collision());
             hedge.Add(new HedgeC());

@@ -8,7 +8,7 @@ namespace BabaIsYou.Particles
 {
     public class ParticleEmitter
     {
-        private TimeSpan emitterLifetime = TimeSpan.FromSeconds(4);
+        private TimeSpan emitterLifetime = TimeSpan.FromMilliseconds(1000);
         public bool done = false;
 
         private Dictionary<int, Particle> m_particles = new Dictionary<int, Particle>();

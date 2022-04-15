@@ -13,7 +13,7 @@ namespace Systems
         ContentManager content;
         private int CELL_SIZE;
         private TimeSpan rate = TimeSpan.FromMilliseconds(10);
-        private TimeSpan lifetime = TimeSpan.FromMilliseconds(1000);
+        private TimeSpan lifetime = TimeSpan.FromMilliseconds(500);
         private TimeSpan switchover = TimeSpan.FromMilliseconds(1000);
 
         public Particles(ContentManager content, GameBoard gameBoard, int CELL_SIZE)
