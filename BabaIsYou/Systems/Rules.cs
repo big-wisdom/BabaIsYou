@@ -133,6 +133,11 @@ namespace Systems
                             if (newComp.GetType() == typeof(Components.PushC) && !e.ContainsComponent<Movable>())
                             {
                                 e.Add(new Movable());
+                            } else if (newComp.GetType() == typeof(Components.You) && ! particleLock)
+                            {
+                                // particle effect will be created by the particle system
+                                gameBoard.particlePositions.Add(e.GetComponent<Position>());
+                                particleLock = true;
                             }
                         }
                     }
@@ -142,6 +147,8 @@ namespace Systems
                 AddEntity(e);
             }
         }
+
+        private bool particleLock = false;
 
         private void cleanEntity(Entity e)
         {

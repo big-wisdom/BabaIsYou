@@ -22,6 +22,7 @@ namespace BabaIsYou
         private Systems.Renderer m_sysRenderer;
         private Systems.Collision m_sysCollision;
         private Systems.Movement m_sysMovement;
+        private Systems.Particles m_sysParticles;
         private Systems.KeyboardInput m_sysKeyboardInput;
         private Systems.Rules m_sysRules;
 
@@ -43,10 +44,12 @@ namespace BabaIsYou
             // initialize gameBoard
             gameBoard = new GameBoard(GRID_SIZE, components);
 
+            int CELL_SIZE = WINDOW_HEIGHT / gameBoard.GRID_SIZE;
 
-            m_sysRenderer = new Systems.Renderer(spriteBatch, WINDOW_WIDTH, WINDOW_HEIGHT, gameBoard);
+            m_sysRenderer = new Systems.Renderer(spriteBatch, CELL_SIZE, gameBoard);
             m_sysCollision = new Systems.Collision(gameBoard);
             m_sysMovement = new Systems.Movement(gameBoard, keyboard);
+            m_sysParticles = new Systems.Particles(content, gameBoard, CELL_SIZE);
             m_sysKeyboardInput = new Systems.KeyboardInput(keyboard);
             m_sysRules = new Systems.Rules(gameBoard, components, RemoveEntity, AddEntity);
 
@@ -58,6 +61,7 @@ namespace BabaIsYou
             m_sysKeyboardInput.Update(gameTime);
             m_sysCollision.Update(gameTime);
             m_sysMovement.Update(gameTime);
+            m_sysParticles.Update(gameTime);
             m_sysRules.Update(gameTime);
 
             //foreach (var entity in m_removeThese)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BabaIsYou;
+using BabaIsYou.Particles;
 using Entities;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -14,10 +15,10 @@ namespace Systems
         private readonly int CELL_SIZE;
         private readonly SpriteBatch m_spriteBatch;
 
-        public Renderer(SpriteBatch spriteBatch, int width, int height, GameBoard gameBoard) :
+        public Renderer(SpriteBatch spriteBatch, int CELL_SIZE, GameBoard gameBoard) :
             base(typeof(Components.Appearance), typeof(Components.Position))
         {
-            CELL_SIZE = height / gameBoard.GRID_SIZE;
+            this.CELL_SIZE = CELL_SIZE;
             m_spriteBatch = spriteBatch;
             this.gameBoard = gameBoard;
         }
@@ -37,10 +38,12 @@ namespace Systems
                     }
                 }
             }
-            //foreach (var entity in m_entities.Values)
-            //{
-            //    renderEntity(entity);
-            //}
+
+            // render each particle emitter on the gameBoard
+            foreach (ParticleEmitter p in gameBoard.particleEmmiters)
+            {
+                p.draw(m_spriteBatch);
+            }
 
             m_spriteBatch.End();
         }

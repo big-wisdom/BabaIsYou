@@ -2,6 +2,7 @@
 using Entities;
 using Microsoft.Xna.Framework;
 using Components;
+using BabaIsYou.Particles;
 
 namespace BabaIsYou
 {
@@ -10,6 +11,9 @@ namespace BabaIsYou
         public List<List<LinkedList<Entity>>> gameBoard = new List<List<LinkedList<Entity>>>();
         public int GRID_SIZE;
         ComponentContext components;
+
+        public List<Position> particlePositions = new List<Position>();
+        public List<ParticleEmitter> particleEmmiters = new List<ParticleEmitter>();
 
         public GameBoard(int GRID_SIZE, ComponentContext components)
         {

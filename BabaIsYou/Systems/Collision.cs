@@ -37,7 +37,7 @@ namespace Systems
                     if (gameBoard.gameBoard[y][x].Count > 0)
                     {
                         Entity e = gameBoard.gameBoard[y][x].Last.Value; // TODO: this will only update the top item of each stack
-                        Position newP;
+                        Position newP; // TODO: right now when I am a wall, I can go through hedges
                         if ((newP = getTargetDestination(e)) != null)
                         {
                             e.GetComponent<Movable>().movementDirection = move(e, newP);
