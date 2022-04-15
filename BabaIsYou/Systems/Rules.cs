@@ -95,11 +95,15 @@ namespace Systems
                 foreach (List<Words> rule in rules)
                 {
                     // if entity has component of first rule
-                        // if third is object
-                            // get position from this entity
-                            // replace this entity with a new entity at that position
-                        // else
-                            // add in whatever component it needs
+                        // if entity doesn't have component
+                            // if third is object
+                                // get position from this entity
+                                // replace this entity with a new entity at that position
+                                // add back to update list
+                            // else
+                                // get an instance of the new component
+                                // if new component is type win or you, add a particle effect
+                                // add new component to entity
 
 
                     // if entity has component of first of rule
