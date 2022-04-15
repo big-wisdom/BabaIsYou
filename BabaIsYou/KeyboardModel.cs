@@ -26,7 +26,6 @@ namespace BabaIsYou
 
         public void update(TimeSpan elapsedTime)
         {
-            List<Keys> removeKeys = new List<Keys>();
             List<Keys> keys = new List<Keys>(locked.Keys);
             foreach (Keys key in keys)
             {

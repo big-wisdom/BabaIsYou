@@ -64,7 +64,10 @@ namespace Systems
 
                 // stop
                 if (targetEntity.ContainsComponent<StopC>())
+                {
+                    e.GetComponent<Movable>().movementDirection = Direction.Stopped;
                     return Direction.Stopped;
+                }
 
                 // kill
                 if (targetEntity.ContainsComponent<KillC>())
@@ -75,7 +78,7 @@ namespace Systems
                     throw new NotImplementedException();
 
                 // win
-                if (targetEntity.ContainsComponent<KillC>())
+                if (targetEntity.ContainsComponent<WinC>())
                     throw new NotImplementedException();
             }
 
