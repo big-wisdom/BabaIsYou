@@ -82,77 +82,89 @@ namespace Systems
             applyRules(sentences);
         }
 
+
+        List<List<Words>> oldRules;
         private void applyRules(List<List<Words>> rules)
         {
+            List<List<Words>> undoRules = new List<List<Words>>();
+            if (oldRules != null)
+            {
+                foreach (List<Words> rule in oldRules)
+                {
+                    bool stillThere = false;
+                    foreach (List<Words> r in rules)
+                    {
+                        if (rule[0] == r[0] && rule[1] == r[1] && rule[2] == r[2]) stillThere = true;
+                    }
+                    if (!stillThere) undoRules.Add(rule); // if rule that was there last cycle isn't this time, undo it
+                }
+            }
+            oldRules = rules;
+
             List<Entity> updateList = gameBoard.getEntities();
             for (int i = 0; i < updateList.Count; i++)
             {
                 Entity e = updateList[i];
-                if (e.ContainsComponent<FlagC>())
+                if (e.ContainsComponent<BabaComponent>())
                 { 
-                }
-                cleanEntity(e); // remove all components that should only be set by rules
+                }// remove all components that should only be set by rules
                 foreach (List<Words> rule in rules)
                 {
                     // if entity has component of first rule
-                        // if entity doesn't have component
+                    if (e.ContainsComponent(getType(rule[0])))
+                    {
+                        // if entity doesn't have component add it
+                        if (!e.ContainsComponent(getType(rule[2])))
+                        {
                             // if third is object
+                            if (isObject(rule[2]))
+                            {
                                 // get position from this entity
+                                Position p = e.GetComponent<Position>();
                                 // replace this entity with a new entity at that position
+                                RemoveEntity(e);
+                                e = components.getObjectEntity(rule[2], p.x, p.y);
+                                AddEntity(e);
                                 // add back to update list
-                            // else
+                                updateList.Add(e);
+                            }
+                            else
+                            {
                                 // get an instance of the new component
                                 // if new component is type win or you, add a particle effect
                                 // add new component to entity
-
-
-                    // if entity has component of first of rule
-                    if (updateList[i].ContainsComponent(getType(rule[0])))
-                    {
-                        // if third is object
-                        if (isObject(rule[2]))
-                        {
-                            // get this entities position
-                            // remove it
-                            // add in one of type rule[2]
-                            // change type of entity
-                            Component oldComponent = e.GetComponent(getType(rule[0]));
-                            e.Remove(oldComponent); // remove the old object type
-                            e.Remove<Appearance>(); // remove appearance
-
-                            // change appearance
-                            // from type, I'm going to need to generate a new appearance component
-                            Appearance newAppearance = components.appearances[rule[2]];
-
-                            // add to end of update list to go get all rules that apply to it
-                            updateList.Add(e);
-                        }
-
-                        // here I contruct a new object of type getType(rules[2])
-                        // this will also probably be more complicated when turning into baba
-                        if (!e.ContainsComponent(getType(rule[2])))
-                        {
-                            Component newComp = getInstanceOfType(getType(rule[2]));
-                            e.Add(newComp); // do I need to make this a more specific type?
-                            if (newComp.GetType() == typeof(Components.PushC) && !e.ContainsComponent<Movable>())
-                            {
-                                e.Add(new Movable());
-                            } else if (newComp.GetType() == typeof(Components.You) && ! particleLock)
-                            {
-                                // particle effect will be created by the particle system
-                                gameBoard.particlePositions.Add(e.GetComponent<Position>());
-                                particleLock = true;
+                                Component newComp = getInstanceOfType(getType(rule[2]));
+                                e.Add(newComp); // do I need to make this a more specific type?
+                                if (newComp.GetType() == typeof(Components.PushC) && !e.ContainsComponent<Movable>())
+                                {
+                                    e.Add(new Movable());
+                                }
+                                else if (newComp.GetType() == typeof(Components.You) || newComp.GetType() == typeof(Components.WinC))
+                                {
+                                    // particle effect will be created by the particle system
+                                    gameBoard.particlePositions.Add(e.GetComponent<Position>());
+                                }
                             }
                         }
                     }
                 }
+
+                foreach (List<Words> rule in undoRules)
+                {
+                    if (e.ContainsComponent(getType(rule[0])))
+                    {
+                        if (e.ContainsComponent(getType(rule[2])) && isQuality(rule[2]))
+                        {
+                            e.Remove(e.GetComponent(getType(rule[2])));
+                        }
+                    }
+                }
+
                 // re-add entity to systems to update which systems care about this entity
                 RemoveEntity(e);
                 AddEntity(e);
             }
         }
-
-        private bool particleLock = false;
 
         private void cleanEntity(Entity e)
         {
