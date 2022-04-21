@@ -20,10 +20,7 @@ namespace Systems
 
         /// <summary>
         /// Check to see if any movable components collide with any other
-        /// collision components.
-        ///
-        /// Step 1: find all movable components first
-        /// Step 2: Test the movable components for collision with other (but not self) collision components
+        /// collision components. the movable components for collision with other (but not self) collision components
         /// </summary>
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
@@ -79,7 +76,10 @@ namespace Systems
 
                 // win
                 if (targetEntity.ContainsComponent<WinC>())
-                    throw new NotImplementedException();
+                {
+                    // play fireworks
+                    // Show win and press enter to return to main menu
+                }
             }
 
             // just leave movementDirection how it is

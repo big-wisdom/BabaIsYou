@@ -1,4 +1,5 @@
 ﻿using BabaIsYou;
+using Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using System.Collections.Generic;
@@ -12,6 +13,7 @@ namespace CS5410
         private GameStateEnum m_nextStateEnum = GameStateEnum.MainMenu;
         private Dictionary<GameStateEnum, IGameState> m_states;
         public KeyboardModel keyboard = new KeyboardModel();
+        private GameBoard gameBoard;
 
         public Controls controls = new Controls();
 
@@ -29,9 +31,17 @@ namespace CS5410
 
             m_graphics.ApplyChanges();
 
+            Levels levels = new Levels("../../../levelFiles/levels-all.bbiy");
+
+            //You you = new You(controls);
+            //ComponentContext components = new ComponentContext(this.Content, you);
+            //this.gameBoard = new GameBoard(components);
+
+
             // Create all the game states here
             m_states = new Dictionary<GameStateEnum, IGameState>();
             m_states.Add(GameStateEnum.MainMenu, new MainMenuView(keyboard));
+            // TODO: add level selection state
             m_states.Add(GameStateEnum.GamePlay, new GamePlayView(controls, keyboard));
             m_states.Add(GameStateEnum.HighScores, new HighScoresView());
             m_states.Add(GameStateEnum.Help, new SettingsView(controls, keyboard));

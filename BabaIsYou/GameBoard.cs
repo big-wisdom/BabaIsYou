@@ -15,9 +15,8 @@ namespace BabaIsYou
         public List<Position> particlePositions = new List<Position>();
         public List<ParticleEmitter> particleEmmiters = new List<ParticleEmitter>();
 
-        public GameBoard(int GRID_SIZE, ComponentContext components)
+        public GameBoard(ComponentContext components)
         {
-            this.GRID_SIZE = GRID_SIZE;
             this.components = components;
 
             for (int y=0; y<GRID_SIZE; y++) {
