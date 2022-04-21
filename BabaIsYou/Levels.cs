@@ -5,10 +5,10 @@ using System.IO;
 
 namespace BabaIsYou
 {
-    class Levels
+    public class Levels
     {
         private List<Level> levels;
-        public int currentIndex = 0;
+        public int currentIndex = 2;
         public Level currentLevel
         {
             get
@@ -42,10 +42,10 @@ namespace BabaIsYou
             List<List<LinkedList<char>>> board = initializeList(dimensions);
 
             // read in background items
-            board = singleScan(stream, dimensions, board);
+            singleScan(stream, dimensions, board);
 
             // read in foreground items
-            board = singleScan(stream, dimensions, board);
+            singleScan(stream, dimensions, board);
 
             return new Level(titleLine, dimensions, board);
         }
@@ -68,16 +68,11 @@ namespace BabaIsYou
                 var row = board[y];
                 for (int x = 0; x < dimensions.X; x++)
                 {
-                    LinkedList<char> cell = new LinkedList<char>();
+                    LinkedList<char> cell = board[y][x];
                     if (line[x] != ' ')
                     {
                         cell.AddLast(line[x]);
                     }
-                    else
-                    {
-                        cell.AddLast(null);
-                    }
-                    row[x] = cell;
                 }
             }
 

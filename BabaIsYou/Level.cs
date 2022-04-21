@@ -3,11 +3,11 @@ using System.Collections.Generic;
 
 namespace BabaIsYou
 {
-    class Level
+    public class Level
     {
         string title;
-        Vector2 dimensions;
-        List<List<LinkedList<char>>> charBoard;
+        public Vector2 dimensions;
+        public List<List<LinkedList<char>>> charBoard;
         public Level(string title, Vector2 dimensions, List<List<LinkedList<char>>> charBoard)
         {
             this.title = title;

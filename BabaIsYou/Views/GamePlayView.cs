@@ -8,11 +8,13 @@ namespace CS5410
 {
     public class GamePlayView : GameStateView
     {
+        Levels levels;
         Controls controls;
         KeyboardModel keyboard;
 
-        public GamePlayView(Controls controls, KeyboardModel keyboard)
+        public GamePlayView(Levels levels, Controls controls, KeyboardModel keyboard)
         {
+            this.levels = levels;
             this.controls = controls;
             this.keyboard = keyboard;
         }
@@ -22,7 +24,7 @@ namespace CS5410
 
         public override void initializeSession()
         {
-            m_gameModel = new GameModel(m_graphics.PreferredBackBufferWidth, m_graphics.PreferredBackBufferHeight, controls, keyboard);
+            m_gameModel = new GameModel(m_graphics.PreferredBackBufferWidth, m_graphics.PreferredBackBufferHeight, controls, keyboard, levels);
             m_gameModel.Initialize(m_content, m_spriteBatch);
         }
 

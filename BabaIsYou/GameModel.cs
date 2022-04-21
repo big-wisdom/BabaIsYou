@@ -13,6 +13,7 @@ namespace BabaIsYou
         private readonly int WINDOW_HEIGHT;
         GameBoard gameBoard;
         Components.ComponentContext components;
+        Levels levels;
         KeyboardModel keyboard;
 
         private List<Entity> m_removeThese = new List<Entity>();
@@ -28,12 +29,13 @@ namespace BabaIsYou
 
         public Components.You youComponent;
 
-        public GameModel(int width, int height, Controls controls, KeyboardModel keyboard)
+        public GameModel(int width, int height, Controls controls, KeyboardModel keyboard, Levels levels)
         {
             this.WINDOW_WIDTH = width;
             this.WINDOW_HEIGHT = height;
             this.youComponent = new Components.You(controls);
             this.keyboard = keyboard;
+            this.levels = levels;
         }
 
         public void Initialize(ContentManager content, SpriteBatch spriteBatch)
@@ -42,9 +44,9 @@ namespace BabaIsYou
             components = new Components.ComponentContext(content, youComponent);
 
             // initialize gameBoard
-            gameBoard = new GameBoard(GRID_SIZE, components);
+            gameBoard = new GameBoard(levels, components);
 
-            int CELL_SIZE = WINDOW_HEIGHT / gameBoard.GRID_SIZE;
+            int CELL_SIZE = WINDOW_HEIGHT / (int)levels.currentLevel.dimensions.Y;
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, CELL_SIZE, gameBoard);
             m_sysCollision = new Systems.Collision(gameBoard);

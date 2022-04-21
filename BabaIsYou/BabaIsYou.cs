@@ -42,7 +42,7 @@ namespace CS5410
             m_states = new Dictionary<GameStateEnum, IGameState>();
             m_states.Add(GameStateEnum.MainMenu, new MainMenuView(keyboard));
             // TODO: add level selection state
-            m_states.Add(GameStateEnum.GamePlay, new GamePlayView(controls, keyboard));
+            m_states.Add(GameStateEnum.GamePlay, new GamePlayView(levels, controls, keyboard));
             m_states.Add(GameStateEnum.HighScores, new HighScoresView());
             m_states.Add(GameStateEnum.Help, new SettingsView(controls, keyboard));
             m_states.Add(GameStateEnum.About, new AboutView());

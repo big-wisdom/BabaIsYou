@@ -9,54 +9,41 @@ namespace BabaIsYou
     public class GameBoard
     {
         public List<List<LinkedList<Entity>>> gameBoard = new List<List<LinkedList<Entity>>>();
-        public int GRID_SIZE;
         ComponentContext components;
 
         public List<Position> particlePositions = new List<Position>();
         public List<ParticleEmitter> particleEmmiters = new List<ParticleEmitter>();
 
-        public GameBoard(ComponentContext components)
+        private Vector2 dimensions;
+
+        public GameBoard(Levels levels, ComponentContext components)
         {
             this.components = components;
 
-            for (int y=0; y<GRID_SIZE; y++) {
+            this.dimensions = levels.currentLevel.dimensions;
+            for (int y=0; y<dimensions.Y; y++) {
                 gameBoard.Add(new List<LinkedList<Entity>>());
-                for (int x=0; x<GRID_SIZE; x++) {
+                for (int x=0; x<dimensions.X; x++) {
                     var ll = new LinkedList<Entity>();
                     gameBoard[y].Add(ll);
                 }
             }
 
-            initializeBoard();
+            initializeBoard(levels.currentLevel);
         }
 
-        private void initializeBoard()
+        private void initializeBoard(Level level)
         {
-            System.IO.StreamReader stream = new System.IO.StreamReader("../../../levelFiles/level-1.bbiy");
-            string line;
-
-            line = stream.ReadLine(); // this reads the title line
-            line = stream.ReadLine(); // this reads the dimensions
-            string[] dims = line.Split("x");
-            Vector2 dimensions = new Vector2(int.Parse(dims[0]), int.Parse(dims[1]));
-
-            // read in background items
-            for (int y = 0; y < dimensions.Y; y++)
+            for (int y=0; y< level.dimensions.Y; y++)
             {
-                line = stream.ReadLine();
-                for (int x = 0; x < dimensions.X; x++)
+                for (int x=0; x < level.dimensions.X; x++)
                 {
-                    addEntity(components.getEntity(line[x], x, y));
-                }
-            }
+                    LinkedList<char> charList = level.charBoard[y][x];
+                    foreach (char c in charList)
+                    {
+                        addEntity(components.getEntity(c, x, y));
+                    }
 
-            // read in foreground items
-            for (int y=0; y< dimensions.Y; y++)
-            {
-                line = stream.ReadLine();
-                for (int x=0; x < dimensions.X; x++)
-                {
-                    addEntity(components.getEntity(line[x], x, y));
                 }
             }
         }
