@@ -29,6 +29,12 @@ namespace CS5410
         {
             foreach (Keys key in keyboard.GetUnlockedKeys())
             {
+                if (key == Keys.Escape)
+                {
+                    keyboard.lockKey(Keys.Escape);
+                    return GameStateEnum.MainMenu;
+                }
+
                 // Arrow keys to navigate the menu
                 if (key == Keys.Down)
                 {

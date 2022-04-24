@@ -37,7 +37,8 @@ namespace CS5410
         {
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             {
-                return GameStateEnum.MainMenu;
+                keyboard.lockKey(Keys.Escape);
+                return GameStateEnum.LevelSelect;
             }
 
             return GameStateEnum.GamePlay;
