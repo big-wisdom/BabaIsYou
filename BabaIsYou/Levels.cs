@@ -2,13 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace BabaIsYou
 {
+    // this class contains capability to initialize the list of levels from a file
+    // It also tracks current level. The previous and next methods cycle levels forward and backward.
+    // getLevelsList() returns a list of the levels by name for the menu select view
     public class Levels
     {
         private List<Level> levels;
-        public int currentIndex = 2;
+        public int currentIndex = 0;
         public Level currentLevel
         {
             get
@@ -16,7 +20,22 @@ namespace BabaIsYou
                 return levels[currentIndex];
             }
         }
+        public void nextLevel()
+        {
+            currentIndex++;
+            if (currentIndex > levels.Count - 1) currentIndex = 0;
+        }
 
+        public void previousLevel()
+        {
+            currentIndex--;
+            if (currentIndex < 0) currentIndex = levels.Count - 1;
+        }
+
+        public List<String> getLevelsList()
+        {
+            return levels.Select(level => level.title).ToList();
+        }
 
         // Right now all this class does is initialize a list of level objects and provide a currentLevel
         public Levels(String path)

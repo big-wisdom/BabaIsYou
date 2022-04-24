@@ -5,7 +5,7 @@ namespace BabaIsYou
 {
     public class Level
     {
-        string title;
+        public string title;
         public Vector2 dimensions;
         public List<List<LinkedList<char>>> charBoard;
         public Level(string title, Vector2 dimensions, List<List<LinkedList<char>>> charBoard)

@@ -22,7 +22,6 @@ namespace CS5410
         }
 
         private MenuState m_currentSelection = MenuState.NewGame;
-        private bool m_waitForKeyRelease = false;
 
         public MainMenuView(KeyboardModel keyboard)
         {
@@ -37,50 +36,49 @@ namespace CS5410
         public override GameStateEnum processInput(GameTime gameTime)
         {
             // This is the technique I'm using to ensure one keypress makes one menu navigation move
-            if (!m_waitForKeyRelease)
+            foreach (Keys key in keyboard.GetUnlockedKeys())
             {
                 // Arrow keys to navigate the menu
-                if (Keyboard.GetState().IsKeyDown(Keys.Down))
+                if (key == Keys.Down)
                 {
                     m_currentSelection = m_currentSelection + 1;
-                    m_waitForKeyRelease = true;
+                    keyboard.lockKey(Keys.Down);
                 }
-                if (Keyboard.GetState().IsKeyDown(Keys.Up))
+                if (key == Keys.Up)
                 {
                     m_currentSelection = m_currentSelection - 1;
-                    m_waitForKeyRelease = true;
+                    keyboard.lockKey(Keys.Up);
                 }
-                
+
                 // If enter is pressed, return the appropriate new state
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == MenuState.NewGame)
-                {
-                    return GameStateEnum.GamePlay;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == MenuState.HighScores)
-                {
-                    return GameStateEnum.HighScores;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == MenuState.Help)
+                if (key == Keys.Enter)
                 {
                     keyboard.lockKey(Keys.Enter);
-                    return GameStateEnum.Help;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == MenuState.About)
-                {
-                    return GameStateEnum.About;
-                }
-                if (Keyboard.GetState().IsKeyDown(Keys.Enter) && m_currentSelection == MenuState.Quit)
-                {
-                    return GameStateEnum.Exit;
+                    if (m_currentSelection == MenuState.NewGame)
+                    {
+                        return GameStateEnum.LevelSelect;
+                    }
+                    if (m_currentSelection == MenuState.HighScores)
+                    {
+                        return GameStateEnum.HighScores;
+                    }
+                    if (m_currentSelection == MenuState.Help)
+                    {
+                        return GameStateEnum.Help;
+                    }
+                    if (m_currentSelection == MenuState.About)
+                    {
+                        return GameStateEnum.About;
+                    }
+                    if (m_currentSelection == MenuState.Quit)
+                    {
+                        return GameStateEnum.Exit;
+                    }
                 }
             }
-            else if (Keyboard.GetState().IsKeyUp(Keys.Down) && Keyboard.GetState().IsKeyUp(Keys.Up))
-            {
-                m_waitForKeyRelease = false;
-            }
-
             return GameStateEnum.MainMenu;
         }
+
         public override void update(GameTime gameTime)
         {
         }
