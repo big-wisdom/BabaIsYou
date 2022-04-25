@@ -292,6 +292,7 @@ namespace Systems
                 case Words.Flag:
                 case Words.Rock:
                 case Words.Water:
+                case Words.Lava:
                     return true;
                 default:
                     return false;

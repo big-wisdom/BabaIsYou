@@ -50,6 +50,19 @@ namespace Systems
                             }
 
                         }
+                        else
+                        {
+                            foreach (Entity current in gameBoard.gameBoard[y][x])
+                                if (current != e && current.ContainsComponent<KillC>() && ((!e.ContainsComponent<RockC>() && !e.ContainsComponent<Word>()) || e.ContainsComponent<You>()))
+                                {
+                                    // remove e
+                                    Position p = current.GetComponent<Position>();
+                                    remove(e);
+                                    // particle effect
+                                    gameBoard.particlePositions.Add(p);
+                                    break;
+                                }
+                        }
                     }
                 }
             }
@@ -61,42 +74,50 @@ namespace Systems
             // if not empty
             if (gameBoard.gameBoard[target.y][target.x].Count > 0)
             {
-                Entity targetEntity = gameBoard.gameBoard[target.y][target.x].Last.Value; // only check the thing on top
-                // push
-                if (targetEntity.ContainsComponent<PushC>())
+                foreach (Entity targetEntity in gameBoard.gameBoard[target.y][target.x])
                 {
-                    // if something is push, it should be movable
-                    targetEntity.GetComponent<Movable>().movementDirection = e.GetComponent<Movable>().movementDirection;
-                    return move(targetEntity, getTargetDestination(targetEntity));
-                }
+                    // push
+                    if (targetEntity.ContainsComponent<PushC>())
+                    {
+                        // if something is push, it should be movable
+                        targetEntity.GetComponent<Movable>().movementDirection = e.GetComponent<Movable>().movementDirection;
+                        return move(targetEntity, getTargetDestination(targetEntity));
+                    }
 
-                // stop
-                if (targetEntity.ContainsComponent<StopC>())
-                {
-                    e.GetComponent<Movable>().movementDirection = Direction.Stopped;
-                    return Direction.Stopped;
-                }
+                    // stop
+                    if (targetEntity.ContainsComponent<StopC>())
+                    {
+                        e.GetComponent<Movable>().movementDirection = Direction.Stopped;
+                        return Direction.Stopped;
+                    }
 
-                // kill
-                if (targetEntity.ContainsComponent<KillC>())
-                    throw new NotImplementedException();
+                    // kill
+                    if (targetEntity.ContainsComponent<KillC>() && ((!e.ContainsComponent<RockC>() && !e.ContainsComponent<Word>()) || e.ContainsComponent<You>()))
+                    {
+                        // remove e
+                        Position p = targetEntity.GetComponent<Position>();
+                        remove(e);
+                        // particle effect
+                        gameBoard.particlePositions.Add(p);
+                    }
 
-                // sink
-                if (targetEntity.ContainsComponent<SinkC>() && !e.ContainsComponent<Word>())
-                {
-                    // remove both objects from the game
-                    Position p = targetEntity.GetComponent<Position>();
-                    remove(targetEntity);
-                    remove(e);
-                    // add a particle effect
-                    gameBoard.particlePositions.Add(p);
-                }
+                    // sink
+                    if (targetEntity.ContainsComponent<SinkC>() && !e.ContainsComponent<Word>())
+                    {
+                        // remove both objects from the game
+                        Position p = targetEntity.GetComponent<Position>();
+                        remove(targetEntity);
+                        remove(e);
+                        // add a particle effect
+                        gameBoard.particlePositions.Add(p);
+                    }
 
-                // win
-                if (targetEntity.ContainsComponent<WinC>() && e.ContainsComponent<You>())
-                {
-                    // set win to true
-                    gameState.win = true;
+                    // win
+                    if (targetEntity.ContainsComponent<WinC>() && e.ContainsComponent<You>())
+                    {
+                        // set win to true
+                        gameState.win = true;
+                    }
                 }
             }
 
