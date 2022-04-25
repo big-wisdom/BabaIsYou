@@ -48,7 +48,7 @@ namespace BabaIsYou
             int CELL_SIZE = WINDOW_HEIGHT / (int)levels.currentLevel.dimensions.Y;
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, CELL_SIZE, gameBoard);
-            m_sysCollision = new Systems.Collision(gameBoard, gameState);
+            m_sysCollision = new Systems.Collision(gameBoard, gameState, RemoveEntity);
             m_sysMovement = new Systems.Movement(gameBoard, keyboard);
             m_sysParticles = new Systems.Particles(content, gameBoard, CELL_SIZE, gameState);
             m_sysKeyboardInput = new Systems.KeyboardInput(keyboard);

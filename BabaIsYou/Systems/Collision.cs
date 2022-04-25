@@ -11,13 +11,15 @@ namespace Systems
     {
         GameBoard gameBoard;
         GameState gameState;
-        public Collision(GameBoard gameBoard, GameState gameState)
+        Action<Entity> remove;
+        public Collision(GameBoard gameBoard, GameState gameState, Action<Entity> remove)
             : base(
                   typeof(Components.Position)
                   )
         {
             this.gameBoard = gameBoard;
             this.gameState = gameState;
+            this.remove = remove;
         }
 
         /// <summary>
@@ -80,8 +82,15 @@ namespace Systems
                     throw new NotImplementedException();
 
                 // sink
-                if (targetEntity.ContainsComponent<SinkC>())
-                    throw new NotImplementedException();
+                if (targetEntity.ContainsComponent<SinkC>() && !e.ContainsComponent<Word>())
+                {
+                    // remove both objects from the game
+                    Position p = targetEntity.GetComponent<Position>();
+                    remove(targetEntity);
+                    remove(e);
+                    // add a particle effect
+                    gameBoard.particlePositions.Add(p);
+                }
 
                 // win
                 if (targetEntity.ContainsComponent<WinC>() && e.ContainsComponent<You>())
