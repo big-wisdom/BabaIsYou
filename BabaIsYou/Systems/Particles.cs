@@ -15,12 +15,16 @@ namespace Systems
         private TimeSpan rate = TimeSpan.FromMilliseconds(10);
         private TimeSpan lifetime = TimeSpan.FromMilliseconds(500);
         private TimeSpan switchover = TimeSpan.FromMilliseconds(1000);
+        GameState gameState;
+        private bool fireworksLock = false;
+        public bool fireworksDone = false;
 
-        public Particles(ContentManager content, GameBoard gameBoard, int CELL_SIZE)
+        public Particles(ContentManager content, GameBoard gameBoard, int CELL_SIZE, GameState gameState)
         {
             this.gameBoard = gameBoard;
             this.content = content;
             this.CELL_SIZE = CELL_SIZE;
+            this.gameState = gameState;
         }
 
         public override void Update(GameTime gameTime)
@@ -42,7 +46,38 @@ namespace Systems
                 p.update(gameTime);
             }
 
+            if (gameState.win)
+            {
+                if (fireworksLock && gameBoard.particleEmmiters.Count == 0)
+                {
+                    fireworksDone = true;
+                }
+                else
+                    fireworks();
+            }
+
+            // remove all emitters that are complete
             gameBoard.particleEmmiters.RemoveAll((emitter) => emitter.done);
+        }
+
+        private void fireworks()
+        {
+            if (fireworksLock) return;
+
+            TimeSpan fireworkRate = TimeSpan.FromMilliseconds(10);
+            Random random = new Random();
+            int fireworkX;
+            int fireworkY;
+            TimeSpan delay;
+            for (int i=0; i<4; i++)
+            {
+                fireworkX = random.Next(0, gameBoard.gameBoard[0].Count * CELL_SIZE);
+                fireworkY = random.Next(0, gameBoard.gameBoard.Count * CELL_SIZE);
+                delay = TimeSpan.FromMilliseconds(random.Next(0, 3000));
+                gameBoard.particleEmmiters.Add(new ParticleEmitter(content, fireworkRate, fireworkX, fireworkY, CELL_SIZE / 2, 1, lifetime, delay));
+            }
+
+            fireworksLock = true; // ensure this only runs once
         }
     }
 }

@@ -8,6 +8,7 @@ namespace BabaIsYou
 {
     public class GameModel
     {
+        public bool win = false;
         private const int GRID_SIZE = 20;
         private readonly int WINDOW_WIDTH;
         private readonly int WINDOW_HEIGHT;
@@ -15,9 +16,7 @@ namespace BabaIsYou
         Components.ComponentContext components;
         Levels levels;
         KeyboardModel keyboard;
-
-        private List<Entity> m_removeThese = new List<Entity>();
-        private List<Entity> m_addThese = new List<Entity>();
+        GameState gameState = new GameState();
 
 
         private Systems.Renderer m_sysRenderer;
@@ -49,9 +48,9 @@ namespace BabaIsYou
             int CELL_SIZE = WINDOW_HEIGHT / (int)levels.currentLevel.dimensions.Y;
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, CELL_SIZE, gameBoard);
-            m_sysCollision = new Systems.Collision(gameBoard);
+            m_sysCollision = new Systems.Collision(gameBoard, gameState);
             m_sysMovement = new Systems.Movement(gameBoard, keyboard);
-            m_sysParticles = new Systems.Particles(content, gameBoard, CELL_SIZE);
+            m_sysParticles = new Systems.Particles(content, gameBoard, CELL_SIZE, gameState);
             m_sysKeyboardInput = new Systems.KeyboardInput(keyboard);
             m_sysRules = new Systems.Rules(gameBoard, components, RemoveEntity, AddEntity);
 
@@ -65,18 +64,7 @@ namespace BabaIsYou
             m_sysMovement.Update(gameTime);
             m_sysParticles.Update(gameTime);
             m_sysRules.Update(gameTime);
-
-            //foreach (var entity in m_removeThese)
-            //{
-            //    RemoveEntity(entity);
-            //}
-            //m_removeThese.Clear();
-
-            //foreach (var entity in m_addThese)
-            //{
-            //    AddEntity(entity);
-            //}
-            m_addThese.Clear();
+            if (m_sysParticles.fireworksDone) win = true;
         }
 
         public void Draw(GameTime gameTime)
@@ -90,7 +78,6 @@ namespace BabaIsYou
 
             m_sysKeyboardInput.Add(entity);
             m_sysMovement.Add(entity);
-            //m_sysCollision.Add(entity);
             m_sysRenderer.Add(entity);
             m_sysRules.Add(entity); // I don't really need to add this as it just goes off of the game board but here we are
         }
@@ -112,7 +99,6 @@ namespace BabaIsYou
             {
                 m_sysKeyboardInput.Add(entity);
                 m_sysMovement.Add(entity);
-                //m_sysCollision.Add(entity);
                 m_sysRenderer.Add(entity);
                 m_sysRules.Add(entity); // I don't really need to add this as it just goes off of the game board but here we are
             }

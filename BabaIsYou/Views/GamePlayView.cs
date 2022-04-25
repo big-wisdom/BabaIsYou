@@ -41,6 +41,8 @@ namespace CS5410
                 return GameStateEnum.LevelSelect;
             }
 
+            if (m_gameModel.win) return GameStateEnum.LevelSelect;
+
             return GameStateEnum.GamePlay;
         }
 

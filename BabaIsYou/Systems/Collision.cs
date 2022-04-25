@@ -10,12 +10,14 @@ namespace Systems
     public class Collision : System
     {
         GameBoard gameBoard;
-        public Collision(GameBoard gameBoard)
+        GameState gameState;
+        public Collision(GameBoard gameBoard, GameState gameState)
             : base(
                   typeof(Components.Position)
                   )
         {
             this.gameBoard = gameBoard;
+            this.gameState = gameState;
         }
 
         /// <summary>
@@ -37,7 +39,14 @@ namespace Systems
                         Position newP; // TODO: right now when I am a wall, I can go through hedges
                         if ((newP = getTargetDestination(e)) != null)
                         {
-                            e.GetComponent<Movable>().movementDirection = move(e, newP);
+                            if (gameState.win)
+                            {
+                                e.GetComponent<Movable>().movementDirection = Direction.Stopped;
+                            } else
+                            {
+                                e.GetComponent<Movable>().movementDirection = move(e, newP);
+                            }
+
                         }
                     }
                 }
@@ -75,10 +84,10 @@ namespace Systems
                     throw new NotImplementedException();
 
                 // win
-                if (targetEntity.ContainsComponent<WinC>())
+                if (targetEntity.ContainsComponent<WinC>() && e.ContainsComponent<You>())
                 {
-                    // play fireworks
-                    // Show win and press enter to return to main menu
+                    // set win to true
+                    gameState.win = true;
                 }
             }
 
