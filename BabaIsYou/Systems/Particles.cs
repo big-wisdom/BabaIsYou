@@ -14,7 +14,6 @@ namespace Systems
         private int CELL_SIZE;
         private TimeSpan rate = TimeSpan.FromMilliseconds(10);
         private TimeSpan lifetime = TimeSpan.FromMilliseconds(500);
-        private TimeSpan switchover = TimeSpan.FromMilliseconds(1000);
         GameState gameState;
         private bool fireworksLock = false;
         public bool fireworksDone = false;
@@ -35,7 +34,7 @@ namespace Systems
                 // create a particle emitter for each
                 int sourceX = (p.x * CELL_SIZE) + (CELL_SIZE / 2);
                 int sourceY = (p.y * CELL_SIZE) + (CELL_SIZE / 2);
-                gameBoard.particleEmmiters.Add(new ParticleEmitter(content, rate, sourceX, sourceY, CELL_SIZE, 1, lifetime, switchover));
+                gameBoard.particleEmmiters.Add(new ParticleEmitter(content, rate, sourceX, sourceY, CELL_SIZE, 1, lifetime, TimeSpan.Zero));
             }
             gameBoard.particlePositions.Clear();
 
@@ -69,7 +68,7 @@ namespace Systems
             int fireworkX;
             int fireworkY;
             TimeSpan delay;
-            for (int i=0; i<4; i++)
+            for (int i=0; i<10; i++)
             {
                 fireworkX = random.Next(0, gameBoard.gameBoard[0].Count * CELL_SIZE);
                 fireworkY = random.Next(0, gameBoard.gameBoard.Count * CELL_SIZE);

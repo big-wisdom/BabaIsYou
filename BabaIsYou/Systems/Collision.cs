@@ -111,6 +111,7 @@ namespace Systems
                         remove(e);
                         // add a particle effect
                         gameBoard.particlePositions.Add(p);
+                        break;
                     }
 
                     // win

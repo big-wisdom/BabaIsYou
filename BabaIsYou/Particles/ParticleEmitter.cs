@@ -49,7 +49,7 @@ namespace BabaIsYou.Particles
         /// </summary>
         public void update(GameTime gameTime)
         {
-            if (m_delay < TimeSpan.Zero)
+            if (m_delay > TimeSpan.Zero)
             {
                 m_delay -= gameTime.ElapsedGameTime;
             }
