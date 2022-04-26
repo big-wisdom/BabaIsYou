@@ -5,7 +5,6 @@
         MainMenu,
         LevelSelect,
         GamePlay,
-        HighScores,
         Help,
         About,
         Exit

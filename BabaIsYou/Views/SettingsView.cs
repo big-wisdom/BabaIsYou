@@ -116,7 +116,7 @@ namespace CS5410
         {
             m_spriteBatch.Begin();
 
-            float bottom = 200;
+            float bottom = 100;
             float previousBottom = bottom;
             foreach (Components.Direction d in controlsList) {
                 String textPart2;

@@ -52,7 +52,6 @@ namespace CS5410
             m_states.Add(GameStateEnum.MainMenu, new MainMenuView(keyboard));
             m_states.Add(GameStateEnum.LevelSelect, new LevelSelectView(keyboard, levels));
             m_states.Add(GameStateEnum.GamePlay, new GamePlayView(levels, controls, keyboard));
-            m_states.Add(GameStateEnum.HighScores, new HighScoresView());
             m_states.Add(GameStateEnum.Help, new SettingsView(controls, keyboard));
             m_states.Add(GameStateEnum.About, new AboutView());
 

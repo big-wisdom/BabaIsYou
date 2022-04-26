@@ -8,7 +8,7 @@ namespace CS5410
     public class AboutView : GameStateView
     {
         private SpriteFont m_font;
-        private const string MESSAGE = "*I* wrote this amazing game!";
+        private const string MESSAGE = "Clone of Baba Is You\nBy Hempuli\nWritten by Eli :)";
 
         public override void loadContent(ContentManager contentManager)
         {

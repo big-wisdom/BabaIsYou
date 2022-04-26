@@ -16,7 +16,6 @@ namespace CS5410
         private enum MenuState
         {
             NewGame,
-            HighScores,
             Help,
             About,
             Quit
@@ -68,10 +67,6 @@ namespace CS5410
                     {
                         return GameStateEnum.LevelSelect;
                     }
-                    if (m_currentSelection == MenuState.HighScores)
-                    {
-                        return GameStateEnum.HighScores;
-                    }
                     if (m_currentSelection == MenuState.Help)
                     {
                         return GameStateEnum.Help;
@@ -100,9 +95,8 @@ namespace CS5410
             float bottom = drawMenuItem(
                 m_currentSelection == MenuState.NewGame ? m_fontMenuSelect : m_fontMenu, 
                 "New Game",
-                200, 
+                100, 
                 m_currentSelection == MenuState.NewGame ? Color.Yellow : Color.Blue);
-            bottom = drawMenuItem(m_currentSelection == MenuState.HighScores ? m_fontMenuSelect : m_fontMenu, "High Scores", bottom, m_currentSelection == MenuState.HighScores ? Color.Yellow : Color.Blue);
             bottom = drawMenuItem(m_currentSelection == MenuState.Help ? m_fontMenuSelect : m_fontMenu, "Settings", bottom, m_currentSelection == MenuState.Help ? Color.Yellow : Color.Blue);
             bottom = drawMenuItem(m_currentSelection == MenuState.About ? m_fontMenuSelect : m_fontMenu, "About", bottom, m_currentSelection == MenuState.About ? Color.Yellow : Color.Blue);
             drawMenuItem(m_currentSelection == MenuState.Quit ? m_fontMenuSelect : m_fontMenu, "Quit", bottom, m_currentSelection == MenuState.Quit ? Color.Yellow : Color.Blue);
