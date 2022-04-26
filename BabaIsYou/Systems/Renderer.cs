@@ -8,9 +8,11 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Systems
 {
-
     class Renderer : System
     {
+        TimeSpan animationTime = TimeSpan.FromMilliseconds(100);
+        TimeSpan timeLeft = TimeSpan.FromMilliseconds(150);
+        bool animate = false;
         private readonly GameBoard gameBoard;
         private readonly int CELL_SIZE;
         private readonly SpriteBatch m_spriteBatch;
@@ -25,6 +27,13 @@ namespace Systems
 
         public override void Update(GameTime gameTime)
         {
+            timeLeft -= gameTime.ElapsedGameTime;
+            if (timeLeft < TimeSpan.Zero)
+            {
+                timeLeft = animationTime;
+                animate = true;
+            }
+
             m_spriteBatch.Begin();
 
             foreach (List<LinkedList<Entity>> row in gameBoard.gameBoard)
@@ -38,6 +47,7 @@ namespace Systems
                     }
                 }
             }
+            animate = false;
 
             // render each particle emitter on the gameBoard
             foreach (ParticleEmitter p in gameBoard.particleEmmiters)
@@ -51,8 +61,11 @@ namespace Systems
         private void renderEntity(Entity entity)
         {
             var appearance = entity.GetComponent<Components.Appearance>();
+
             var position = entity.GetComponent<Components.Position>();
             var baba = entity.GetComponent<Components.BabaComponent>();
+
+            if (animate) appearance.nextFrame();
 
             Rectangle area = new Rectangle();
 

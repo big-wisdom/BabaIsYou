@@ -18,6 +18,7 @@ namespace Components
             this.image = image;
             this.fill = fill;
             this.stroke = stroke;
+
         }
 
         public Appearance(Texture2D image, Func<int, Rectangle> computeSourceRectangle, int frames, Color fill, Color stroke)
@@ -27,6 +28,8 @@ namespace Components
             this.frames = frames;
             this.fill = fill;
             this.stroke = stroke;
+            Random random = new Random();
+            this.frame = random.Next(0, frames);
         }
 
         public void nextFrame() {
