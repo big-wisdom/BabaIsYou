@@ -20,18 +20,20 @@ namespace BabaIsYou.Particles
         private int m_sourceY;
         private int m_sarticleSize;
         private int m_speed;
+        private int CELL_SIZE;
         private TimeSpan m_lifetime;
         private TimeSpan m_delay;
 
         public Vector2 Gravity { get; set; }
 
-        public ParticleEmitter(ContentManager content, TimeSpan rate, int sourceX, int sourceY, int size, int speed, TimeSpan lifetime, TimeSpan delay)
+        public ParticleEmitter(ContentManager content, TimeSpan rate, int sourceX, int sourceY, int CELL_SIZE, int speed, TimeSpan lifetime, TimeSpan delay)
         {
             m_rate = rate;
             m_sourceX = sourceX;
             m_sourceY = sourceY;
-            m_sarticleSize = size;
+            m_sarticleSize = CELL_SIZE/5;
             m_speed = speed;
+            this.CELL_SIZE = CELL_SIZE;
             m_lifetime = lifetime;
             m_delay = delay;
 
@@ -66,11 +68,15 @@ namespace BabaIsYou.Particles
                 {
                     m_accumulated -= m_rate;
 
+                    Vector2 pos = new Vector2(m_sourceX, m_sourceY);
+                    Vector2 dir = m_random.nextCircleVector();
+
                     Particle p = new Particle(
                         m_random.Next(),
-                        new Vector2(m_sourceX, m_sourceY),
-                        m_random.nextCircleVector(),
-                        (float)m_random.nextGaussian(m_speed, 1),
+                        pos + (dir*(CELL_SIZE/2)),
+                        dir,
+                        m_speed,
+                        //(float)m_random.nextGaussian(m_speed, 1),
                         m_lifetime);
 
                     if (!m_particles.ContainsKey(p.name))

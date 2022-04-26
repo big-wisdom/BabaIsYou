@@ -35,7 +35,7 @@ namespace Systems
                 // create a particle emitter for each
                 int sourceX = (p.x * CELL_SIZE) + (CELL_SIZE / 2);
                 int sourceY = (p.y * CELL_SIZE) + (CELL_SIZE / 2);
-                gameBoard.particleEmmiters.Add(new ParticleEmitter(content, rate, sourceX, sourceY, CELL_SIZE/2, 1, lifetime, switchover));
+                gameBoard.particleEmmiters.Add(new ParticleEmitter(content, rate, sourceX, sourceY, CELL_SIZE, 1, lifetime, switchover));
             }
             gameBoard.particlePositions.Clear();
 
@@ -74,7 +74,7 @@ namespace Systems
                 fireworkX = random.Next(0, gameBoard.gameBoard[0].Count * CELL_SIZE);
                 fireworkY = random.Next(0, gameBoard.gameBoard.Count * CELL_SIZE);
                 delay = TimeSpan.FromMilliseconds(random.Next(0, 3000));
-                gameBoard.particleEmmiters.Add(new ParticleEmitter(content, fireworkRate, fireworkX, fireworkY, CELL_SIZE / 2, 1, lifetime, delay));
+                gameBoard.particleEmmiters.Add(new ParticleEmitter(content, fireworkRate, fireworkX, fireworkY, CELL_SIZE, 1, lifetime, delay));
             }
 
             fireworksLock = true; // ensure this only runs once

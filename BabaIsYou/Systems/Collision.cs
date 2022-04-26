@@ -52,12 +52,13 @@ namespace Systems
                         }
                         else
                         {
+                            // for when rules change under somethings feet. Like when something is on lava when the lava becomes kill/defeat
                             foreach (Entity current in gameBoard.gameBoard[y][x])
                                 if (current != e && current.ContainsComponent<KillC>() && ((!e.ContainsComponent<RockC>() && !e.ContainsComponent<Word>()) || e.ContainsComponent<You>()))
                                 {
                                     // remove e
                                     Position p = current.GetComponent<Position>();
-                                    remove(e);
+                                    remove(e);  
                                     // particle effect
                                     gameBoard.particlePositions.Add(p);
                                     break;
