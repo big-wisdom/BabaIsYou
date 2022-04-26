@@ -1,4 +1,5 @@
 ﻿using BabaIsYou;
+using Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using System;
@@ -14,8 +15,9 @@ namespace Systems
     {
         GameBoard gameBoard;
         KeyboardModel keyboard;
+        Audio audio;
 
-        public Movement(GameBoard gameBoard, KeyboardModel keyboard)
+        public Movement(GameBoard gameBoard, KeyboardModel keyboard, Audio audio)
             : base(
                   typeof(Components.Movable),
                   typeof(Components.Position)
@@ -23,6 +25,7 @@ namespace Systems
         {
             this.gameBoard = gameBoard;
             this.keyboard = keyboard;
+            this.audio = audio;
         }
 
         public override void Update(GameTime gameTime) { 
@@ -48,6 +51,8 @@ namespace Systems
                             break;
                     }
                     gameBoard.addEntity(e); // add the entity back in it's new position
+
+                    if (e.ContainsComponent<You>()) audio.playSound(Event.Move);
                 }
                 movable.movementDirection = Components.Direction.Stopped;
             }

@@ -16,6 +16,7 @@ namespace BabaIsYou
         Components.ComponentContext components;
         Levels levels;
         KeyboardModel keyboard;
+        Audio audio;
         GameState gameState = new GameState();
 
 
@@ -42,17 +43,21 @@ namespace BabaIsYou
             // initialize components
             components = new Components.ComponentContext(content, youComponent);
 
+            // Audio
+            audio = new Audio(content);
+            audio.playSound(Event.LevelStart);
+
             // initialize gameBoard
             gameBoard = new GameBoard(levels, components);
 
             int CELL_SIZE = WINDOW_HEIGHT / (int)levels.currentLevel.dimensions.Y;
 
             m_sysRenderer = new Systems.Renderer(spriteBatch, CELL_SIZE, gameBoard);
-            m_sysCollision = new Systems.Collision(gameBoard, gameState, RemoveEntity);
-            m_sysMovement = new Systems.Movement(gameBoard, keyboard);
+            m_sysCollision = new Systems.Collision(gameBoard, gameState, RemoveEntity, audio);
+            m_sysMovement = new Systems.Movement(gameBoard, keyboard, audio);
             m_sysParticles = new Systems.Particles(content, gameBoard, CELL_SIZE, gameState);
             m_sysKeyboardInput = new Systems.KeyboardInput(keyboard);
-            m_sysRules = new Systems.Rules(gameBoard, components, RemoveEntity, AddEntity);
+            m_sysRules = new Systems.Rules(gameBoard, components, RemoveEntity, AddEntity, audio);
 
             initializeEntities();
         }

@@ -34,12 +34,14 @@ namespace Systems
         ComponentContext components;
         Action<Entity> AddEntity;
         Action<Entity> RemoveEntity;
-        public Rules(GameBoard gameBoard, ComponentContext components, Action<Entity>RemoveEntity, Action<Entity>AddEntity)
+        Audio audio;
+        public Rules(GameBoard gameBoard, ComponentContext components, Action<Entity>RemoveEntity, Action<Entity>AddEntity, Audio audio)
         {
             this.gameBoard = gameBoard;
             this.components = components;
             this.AddEntity = AddEntity;
             this.RemoveEntity = RemoveEntity;
+            this.audio = audio;
         }
 
         public override void Update(GameTime gameTime)
@@ -139,9 +141,15 @@ namespace Systems
                                 {
                                     e.Add(new Movable());
                                 }
-                                else if (newComp.GetType() == typeof(Components.You) || newComp.GetType() == typeof(Components.WinC))
+                                else if (newComp.GetType() == typeof(Components.You))
                                 {
+                                    audio.playSound(Event.YouSwitch);
                                     // particle effect will be created by the particle system
+                                    gameBoard.particlePositions.Add(e.GetComponent<Position>());
+                                }
+                                else if (newComp.GetType() == typeof(Components.WinC))
+                                {
+                                    audio.playSound(Event.WinSwitch);
                                     gameBoard.particlePositions.Add(e.GetComponent<Position>());
                                 }
                             }

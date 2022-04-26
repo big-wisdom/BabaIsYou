@@ -12,7 +12,8 @@ namespace Systems
         GameBoard gameBoard;
         GameState gameState;
         Action<Entity> remove;
-        public Collision(GameBoard gameBoard, GameState gameState, Action<Entity> remove)
+        Audio audio;
+        public Collision(GameBoard gameBoard, GameState gameState, Action<Entity> remove, Audio audio)
             : base(
                   typeof(Components.Position)
                   )
@@ -20,6 +21,7 @@ namespace Systems
             this.gameBoard = gameBoard;
             this.gameState = gameState;
             this.remove = remove;
+            this.audio = audio;
         }
 
         /// <summary>
@@ -82,7 +84,7 @@ namespace Systems
                     {
                         // if something is push, it should be movable
                         targetEntity.GetComponent<Movable>().movementDirection = e.GetComponent<Movable>().movementDirection;
-                        Direction newDirection = move(targetEntity, getTargetDestination(targetEntity));
+                        Direction newDirection = (Direction)move(targetEntity, getTargetDestination(targetEntity));
                         e.GetComponent<Movable>().movementDirection = newDirection;
                         return newDirection;
                     }
@@ -97,16 +99,19 @@ namespace Systems
                     // kill
                     if (targetEntity.ContainsComponent<KillC>() && ((!e.ContainsComponent<RockC>() && !e.ContainsComponent<Word>()) || e.ContainsComponent<You>()))
                     {
+                        audio.playSound(Event.Death);
                         // remove e
                         Position p = targetEntity.GetComponent<Position>();
                         remove(e);
                         // particle effect
                         gameBoard.particlePositions.Add(p);
+                        break;
                     }
 
                     // sink
                     if (targetEntity.ContainsComponent<SinkC>() && !e.ContainsComponent<Word>())
                     {
+                        audio.playSound(Event.Death);
                         // remove both objects from the game
                         Position p = targetEntity.GetComponent<Position>();
                         remove(targetEntity);
@@ -119,17 +124,22 @@ namespace Systems
                     // win
                     if (targetEntity.ContainsComponent<WinC>() && e.ContainsComponent<You>())
                     {
+                        audio.playSound(Event.Win);
                         // set win to true
                         gameState.win = true;
                     }
 
+                    // you
                     if (targetEntity.ContainsComponent<You>())
                     {
                         Movable moveComponent = targetEntity.GetComponent<Movable>();
                         if (moveComponent.movementDirection == Direction.Stopped)
                             e.GetComponent<Movable>().movementDirection = Direction.Stopped;
                         else
+                        {
                             e.GetComponent<Movable>().movementDirection = move(targetEntity, getTargetDestination(targetEntity));
+                        }
+
                     }
                 }
             }
