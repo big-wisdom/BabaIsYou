@@ -13,10 +13,10 @@ namespace BabaIsYou
     {
         private Dictionary<Keys, Direction> keyFirstControls = new Dictionary<Keys, Direction>()
         {
-            { Keys.Up, Direction.Up },
-            { Keys.Right, Direction.Right },
-            { Keys.Down, Direction.Down },
-            { Keys.Left, Direction.Left },
+            { Keys.W, Direction.Up },
+            { Keys.D, Direction.Right },
+            { Keys.S, Direction.Down },
+            { Keys.A, Direction.Left },
         };
 
         private Dictionary<Direction, Keys> controlFirstControls;
