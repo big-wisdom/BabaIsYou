@@ -11,7 +11,7 @@ namespace BabaIsYou.Entities
         {
             var water = new Entity();
 
-            water.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.White));
+            water.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.Blue));
             water.Add(new Position(x, y));
             water.Add(new Collision());
             water.Add(new WaterC());
