@@ -82,7 +82,9 @@ namespace Systems
                     {
                         // if something is push, it should be movable
                         targetEntity.GetComponent<Movable>().movementDirection = e.GetComponent<Movable>().movementDirection;
-                        return move(targetEntity, getTargetDestination(targetEntity));
+                        Direction newDirection = move(targetEntity, getTargetDestination(targetEntity));
+                        e.GetComponent<Movable>().movementDirection = newDirection;
+                        return newDirection;
                     }
 
                     // stop
@@ -119,6 +121,15 @@ namespace Systems
                     {
                         // set win to true
                         gameState.win = true;
+                    }
+
+                    if (targetEntity.ContainsComponent<You>())
+                    {
+                        Movable moveComponent = targetEntity.GetComponent<Movable>();
+                        if (moveComponent.movementDirection == Direction.Stopped)
+                            e.GetComponent<Movable>().movementDirection = Direction.Stopped;
+                        else
+                            e.GetComponent<Movable>().movementDirection = move(targetEntity, getTargetDestination(targetEntity));
                     }
                 }
             }
