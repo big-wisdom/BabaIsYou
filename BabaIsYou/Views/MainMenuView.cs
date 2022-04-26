@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace CS5410
 {
@@ -19,6 +20,13 @@ namespace CS5410
             Help,
             About,
             Quit
+        }
+
+        private int states
+        {
+            get {
+                return Enum.GetNames(typeof(MenuState)).Length;
+            }
         }
 
         private MenuState m_currentSelection = MenuState.NewGame;
@@ -42,11 +50,13 @@ namespace CS5410
                 if (key == Keys.Down)
                 {
                     m_currentSelection = m_currentSelection + 1;
+                    if ((int)m_currentSelection > states-1) m_currentSelection = (MenuState)0;
                     keyboard.lockKey(Keys.Down);
                 }
                 if (key == Keys.Up)
                 {
                     m_currentSelection = m_currentSelection - 1;
+                    if ((int)m_currentSelection < 0) m_currentSelection = (MenuState)(states - 1);
                     keyboard.lockKey(Keys.Up);
                 }
 
