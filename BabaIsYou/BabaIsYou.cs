@@ -2,6 +2,7 @@
 using Components;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Media;
 using System.Collections.Generic;
 
 namespace CS5410
@@ -22,6 +23,9 @@ namespace CS5410
             m_graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            MediaPlayer.IsRepeating = true;
+            MediaPlayer.Volume = 0.2F;
+            MediaPlayer.Play(this.Content.Load<Song>("audio/ThemeSong"));
         }
 
         protected override void Initialize()

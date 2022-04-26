@@ -79,6 +79,12 @@
 /processorParam:Quality=Best
 /build:audio/scoot.mp3
 
+#begin audio/ThemeSong.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
+/processorParam:Quality=Best
+/build:audio/ThemeSong.mp3
+
 #begin audio/win.mp3
 /importer:Mp3Importer
 /processor:SoundEffectProcessor
