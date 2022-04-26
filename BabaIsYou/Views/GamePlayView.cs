@@ -35,10 +35,19 @@ namespace CS5410
 
         public override GameStateEnum processInput(GameTime gameTime)
         {
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            foreach (Keys key in keyboard.GetUnlockedKeys())
             {
-                keyboard.lockKey(Keys.Escape);
-                return GameStateEnum.LevelSelect;
+                if (key == Keys.Escape)
+                {
+                    keyboard.lockKey(Keys.Escape);
+                    return GameStateEnum.LevelSelect;
+                }
+                else if (key == Keys.R)
+                {
+                    initializeSession();
+                    keyboard.lockKey(Keys.R);
+                }
+
             }
 
             if (m_gameModel.win) return GameStateEnum.LevelSelect;
