@@ -13,6 +13,7 @@ namespace BabaIsYou.Entities
 
             water.Add(new Appearance(image, computeSourceRectangle, 3, Color.White, Color.Blue));
             water.Add(new Position(x, y));
+            water.Add(new Movable());
             water.Add(new Collision());
             water.Add(new WaterC());
 
