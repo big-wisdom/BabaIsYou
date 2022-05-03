@@ -42,7 +42,8 @@ namespace BabaIsYou
         {
             List<Level> levelsList = new List<Level>();
             // while file not over, read level
-            StreamReader stream = new StreamReader(path);
+            Stream freshStream = TitleContainer.OpenStream(path);
+            StreamReader stream = new StreamReader(freshStream);
             Level level;
             while((level = readLevel(stream)) != null)
             {

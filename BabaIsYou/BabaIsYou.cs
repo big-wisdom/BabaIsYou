@@ -40,7 +40,8 @@ namespace CS5410
 
             m_graphics.ApplyChanges();
 
-            Levels levels = new Levels("../../../levelFiles/levels-all.bbiy");
+            //Levels levels = new Levels("../../../levelFiles/levels-all.bbiy");
+            Levels levels = new Levels(Content.RootDirectory+"/levelFiles/levels-all.bbiy");
 
             //You you = new You(controls);
             //ComponentContext components = new ComponentContext(this.Content, you);
